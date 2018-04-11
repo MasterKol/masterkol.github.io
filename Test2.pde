@@ -677,7 +677,7 @@ function CreateCar(){
 	//println(selection);
 }
 
-for(var i = 0; i < 100; i++){
+for(var i = 0; i < 1000; i++){
 	CreateCar();
 }
 
@@ -791,7 +791,7 @@ void draw(){
 	//}
 
 	if(timer%20 === 0 && round(random(0,1)) === 1 && cars.length < 300){
-		//CreateCar();
+		CreateCar();
 	}
 	
 	if(timer%1000 === 0){
