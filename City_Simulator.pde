@@ -975,8 +975,6 @@ void draw(){
 	}
 
 	var zoomOffsetChange = new PVector(-width/16 + (offset[0]/((-board_Scale-4)*2*width/16) - 1), -height/16 + (offset[1]/((-board_Scale-4)*2*height/16) - 1));
-	textSize(20);
-	text(round(offset[0]) + ", " + round(offset[1]) + ", " + board_Scale,100,100);
 
 	if(keyPressed && key === '='){
 		board_Scale += 0.5;
