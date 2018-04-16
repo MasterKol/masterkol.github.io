@@ -937,8 +937,8 @@ void draw(){
 		translate(offset[0], offset[1]);
 		rectMode(CENTER);
 		//println(board_Scale);
-		println(offset);
-		println(board_Scale);
+		//println(offset);
+		//println(board_Scale);
 
 		//(x-(100/board_Scale))/board_Scale/10 = tx, (y-(100/board_Scale))/board_Scale/10 = ty
 		//var mouseTile = board[constrain(round(((mouseX-offset[0])-(100/board_Scale))/board_Scale/10),0,Size[0])][constrain(round(((mouseY-offset[1])-(100/board_Scale))/board_Scale/10),0,Size[1])];
