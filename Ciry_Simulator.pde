@@ -1245,15 +1245,15 @@ void draw(){
 
 		if(latched[0] !== mincitysizeslider.value && mincitysizeslider.clicked === false){
 			latched[0] = mincitysizeslider.value;
-			regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
+			//regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
 		}
 		if(latched[1] !== maxcitysizeslider.value && maxcitysizeslider.clicked === false){
 			latched[1] = maxcitysizeslider.value;
-			regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
+			//regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
 		}
 		if(latched[2] !== GridSpaceSlider.value && GridSpaceSlider.clicked === false){
 			latched[2] = GridSpaceSlider.value;
-			regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
+			//regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
 		}
 
 		fill(0);
