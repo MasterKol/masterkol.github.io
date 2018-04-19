@@ -15,11 +15,12 @@ var FR = 60;
 
 var AspectRatio = 2;
 var Size = [round(16.5*AspectRatio),round(9.5*AspectRatio)];
-var board_Scale = round(width/(Size[0])*2*1.65)/2;
+var board_Scale = round(width/Size[0]*2*1.65)/2;
+//var board_Scale = 14;
 var board = [];
 var board_Connections = [];
-var offset = [-7*AspectRatio,-7*AspectRatio];
-//var offset = [150/165*];
+var offset = [(5*width)/10,(5*height)/10];
+//var offset = [-1422, -792];
 //var offset = [-35*(board_Scale-8)*2, -55*(board_Scale-8)*2];
 //var offset = [0,0];
 var trafficOverlay = false;
@@ -33,6 +34,7 @@ var cars = [];
 var spots = [];
 var bestScore = 0;
 var carPositions = [];
+var centerPos = new PVector(0,0);
 /*for(var x = 0; x < round(Size[0]*100/8); x++){
 	carPositions.push([]);
 	//for(var y = 0; y < round(Size[1]*100/))
@@ -177,7 +179,7 @@ function GetAdjConnections(x,y) {
 }
 
 function GenAdj(x,y,depth,maxDepth) {
-	if(ArraysEqual(board[x][y], [0,0,0,0]) === false && depth < maxDepth && x >= 3 && x <= Size[0]-3 && y >= 3 && y <= Size[1]-3){
+	if(ArraysEqual(board[x][y], [0,0,0,0]) === false && depth < maxDepth && x >= 4 && x <= Size[0]-4 && y >= 4 && y <= Size[1]-4){
 		var probability = 1.2-(Dist(x,y,origin[0],origin[1])/50);
 		if(ArraysEqual(board[x+1][y], [0,0,0,0]) && board[x][y][0] === 1 && x < Size[0]-2){
 			board[x+1][y] = [round(random(0,probability)), round(random(0,probability)), 1, round(random(0,probability))];
@@ -199,7 +201,7 @@ function GenAdj(x,y,depth,maxDepth) {
 }
 
 function Connect(x,y){
-	if(x >= 3 && x <= Size[0]-3 && y >= 3 && y <= Size[1]-3){
+	if(x >= 2 && x <= Size[0]-2 && y >= 2 && y <= Size[1]-2){
 		var adj = GetAdjConnections(x,y);
 		for(var i = 0; i < adj.length; i++){
 			if(adj[i] === 1){
@@ -395,6 +397,11 @@ piece.prototype.Draw = function() {
 		//	rect(0,0,40,40);
 		//}
 
+		//stroke(255,0,0);
+		//line(0,-50,0,50);
+		//line(-50,0,50,0);
+		//noStroke();
+
 		if(this.roadnum <= 2){
 			this.roadnum = 0;
 		}
@@ -446,7 +453,6 @@ piece.prototype.Draw = function() {
 		//rect(this.pos.x, this.pos.y, 14*board_Scale/10, 14*board_Scale/10);
 	}
 };
-
 
 function FindCIF(that) { // CIF = Car in front
 	var valid = board[that.tile.x][that.tile.y].cars;
@@ -784,11 +790,13 @@ function regenCity(size, attempts, numCars, min, max) {
 	}
 	origin = [floor(Size[0]/2), floor(Size[1]/2)];
 
-	var seed = 0;
-	var seeds = 0;
-	while(seeds < 2){
-		seed = [round(random(0,1)),round(random(0,1)),round(random(0,1)),round(random(0,1))];
-		for(var i = 0; i < seed.length; i++){if(seed[i]===1){seeds++;}}
+	var seed = [0,0,0,0];
+
+	var valid = [0,1,2,3];
+	for(var i = 0; i < round(random(2,4)); i++){
+		var choice = valid[round(random(0,valid.length))];
+		seed[choice] = 1;
+		valid.splice(choice, 1);
 	}
 
 	board[origin[0]][origin[1]] = seed;
@@ -912,12 +920,16 @@ var latched = [mincitysizeslider.value, maxcitysizeslider.value, GridSpaceSlider
 
 var newCitySize = [0,0];
 var GridSpace = 1;
-var GridSpaceAspectRatio = [11,6.3];
+var GridSpaceAspectRatio = [11*2,6.3*2];
 
 regenCity(Size, 30, 500, 25, null);
 
 void draw(){
 	if(screen === "MainGame"){
+		centerPos = new PVector((offset[0]-width/2)/board_Scale*10, (offset[1]-height/2)/board_Scale*10);
+		//centerPos.x = centerPos.x*(100/board_Scale); centerPos.y = centerPos.y*(100/board_Scale);
+
+		//offset = [0,0];
 		background(50,255,50);
 		//background(0);
 
@@ -1043,6 +1055,7 @@ void draw(){
 		text("Your Best is " + bestScore, 0, 60);
 		//text(offset, 0, 100);
 		//text(board_Scale, 0, 80);
+		//text(centerPos, 0, 120);
 
 		/*if(dawn === false){
 			if(round((12.6-time)%1*100) < 10){
@@ -1077,23 +1090,23 @@ void draw(){
 			trafficOverlay = !trafficOverlay;
 		}
 
-		if(keyPressed && keyPressed !== pkeyPressed && key === 'r'){
-			regenCity(Size, 400, 1000, 20, null);
-		}
+		//if(keyPressed && keyPressed !== pkeyPressed && key === 'r'){
+		//	regenCity(Size, 400, 1000, 20, null);
+		//}
 
-		var zoomOffsetChange = new PVector(0, 0);
+		var zoomOffsetChange = new PVector((board_Scale*centerPos.x+5*width)/10,(board_Scale*centerPos.y+5*height)/10);
 
 		if(keyPressed && key === '='){
 			board_Scale += 0.5;
-			offset[0] += -80;
-			offset[1] += -45;
+			offset[0] = (board_Scale*centerPos.x+5*width)/10;
+			offset[1] = (board_Scale*centerPos.y+5*height)/10;
 		}else if(keyPressed && key === '-' && board_Scale > 2){
 			board_Scale -= 0.5;
-			offset[0] += 80;
-			offset[1] += 45;
+			offset[0] = (board_Scale*centerPos.x+(5*width))/10;
+			offset[1] = (board_Scale*centerPos.y+(5*height))/10;
 		}
 
-		stroke(0);
+		//stroke(0);
 		//line(width/2, -1, width/2, height+1);
 		//line(-1, height/2, width+1, height/2);
 	}else if(screen === "MainMenu"){
@@ -1156,10 +1169,10 @@ void draw(){
 		}
 
 		fill(220,220,255);
-		settingsbutton.draw();
-		if(settingsbutton.detectClick(true)){
-			screen = "Settings";
-		}
+		//settingsbutton.draw();
+		//if(settingsbutton.detectClick(true)){
+		//	screen = "Settings";
+		//}
 	}else if(screen === "GameSetup"){
 		background(50,255,50);
 		if(true===true){
@@ -1245,15 +1258,24 @@ void draw(){
 
 		if(latched[0] !== mincitysizeslider.value && mincitysizeslider.clicked === false){
 			latched[0] = mincitysizeslider.value;
-			//regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
+			Size = [round(latched[2]*GridSpaceAspectRatio[0]), round(latched[2]*GridSpaceAspectRatio[1])];
+			board_Scale = round(100/(Size[0])*2*1.65)/2;
+			offset = [(board_Scale*50)/10,(board_Scale*50)/10];
+			regenCity(Size, 400, 1000, mincitysizeslider.value*100+10, maxcitysizeslider.value*100+30);
 		}
 		if(latched[1] !== maxcitysizeslider.value && maxcitysizeslider.clicked === false){
 			latched[1] = maxcitysizeslider.value;
-			//regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
+			Size = [round(latched[2]*GridSpaceAspectRatio[0]), round(latched[2]*GridSpaceAspectRatio[1])];
+			board_Scale = round(100/(Size[0])*2*1.65)/2;
+			offset = [(board_Scale*50)/10,(board_Scale*50)/10];
+			regenCity(Size, 400, 1000, mincitysizeslider.value*100+10, maxcitysizeslider.value*100+30);
 		}
 		if(latched[2] !== GridSpaceSlider.value && GridSpaceSlider.clicked === false){
 			latched[2] = GridSpaceSlider.value;
-			//regenCity([GridSpaceSlider.value*GridSpaceAspectRatio[0], GridSpaceAspectRatio.value*GridSpaceAspectRatio[1]], 100, 1000, mincitysizeslider.value*100-10, maxcitysizeslider.value*100+10);
+			Size = [round(latched[2]*GridSpaceAspectRatio[0]), round(latched[2]*GridSpaceAspectRatio[1])];
+			board_Scale = round(100/(Size[0])*2*1.65)/2;
+			offset = [0,0];
+			regenCity(Size, 400, 1000, mincitysizeslider.value*100+10, maxcitysizeslider.value*100+30);
 		}
 
 		fill(0);
