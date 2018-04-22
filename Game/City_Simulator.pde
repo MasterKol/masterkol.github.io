@@ -10,16 +10,18 @@ var averageSpeed = 0;
 
 var carImages = [loadImage("./Images/Car1.jpg"),loadImage("./Images/Car2.jpg"),loadImage("./Images/Car3.jpg"),loadImage("./Images/Car4.jpg")];
 
+var DefaultSize = [1650, 950];
+
 var time = 12;
 var FR = 60;
 
 var AspectRatio = 2;
 var Size = [round(16.5*AspectRatio),round(9.5*AspectRatio)];
-var board_Scale = round(width/Size[0]*2*1.65)/2;
+var board_Scale = round(100/Size[0]*2*1.65)/2;
 //var board_Scale = 14;
 var board = [];
 var board_Connections = [];
-var offset = [(5*width)/10,(5*height)/10];
+var offset = [50,50];
 //var offset = [-1422, -792];
 //var offset = [-35*(board_Scale-8)*2, -55*(board_Scale-8)*2];
 //var offset = [0,0];
@@ -29,7 +31,8 @@ var pmousePressed = false;
 var pkeyPressed = false;
 var pkey = '';
 var intersections = 0;
-var screen = "MainMenu"; // can be "MainMenu", "MainGame", "GamePaused", "GameSetup", "Help", or "Settings"
+var screen = "MainMenu"; // can be "MainMenu", "MainGame", "GamePaused", "GameSetup", "Instructions"
+var pscreen = "MainMenu";
 var cars = [];
 var spots = [];
 var bestScore = 0;
@@ -373,12 +376,12 @@ piece.prototype.Draw = function() {
 	for(var i=0;i<this.trafficValueHistory.length;i++){this.trafficValue = (this.trafficValue*this.trafficValueHistory.length) + this.trafficValueHistory[i];}
 	this.trafficValue = this.trafficValue/this.trafficValueHistory.length;*/
 
-	if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < width+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < height+(50*(board_Scale/10))){
-		var clickRad = 7;
+	if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < DefaultSize[0]+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < DefaultSize[1]+(50*(board_Scale/10))){
+		var clickRad = 10;
 		if(mousePressed && mouseX >= this.pos.x+offset[0]-clickRad*board_Scale/10 && mouseX <= this.pos.x+offset[0]+clickRad*board_Scale/10 && mouseY >= this.pos.y+offset[1]-clickRad*board_Scale/10 && mouseY <= this.pos.y+offset[1]+clickRad*board_Scale/10 && this.roadnum > 2){
 			//if the center of the tile is clicked
-			if(edditing === null || edditing !== null && mouseX < width*7/8){
-				edditing = this.place
+			if(edditing === null || edditing !== null && mouseX < DefaultSize[0]*7/8){
+				edditing = this.place;
 			}
 		}
 
@@ -570,7 +573,7 @@ Car.prototype.Draw = function(){
 	this.absPos = new PVector(this.tile.x*10*board_Scale+(100/board_Scale) + (this.pos.x*board_Scale/10) + offset[0], this.tile.y*10*board_Scale+(100/board_Scale) + (this.pos.y*board_Scale/10) + offset[1]);
 	this.timer--;
 
-	if(this.absPos.x > -(8*(board_Scale/10)) && this.absPos.x < width+(8*(board_Scale/10)) && this.absPos.y > -(8*(board_Scale/10)) && this.absPos.y < height+(8*(board_Scale/10))){
+	if(this.absPos.x > -(8*(board_Scale/10)) && this.absPos.x < DefaultSize[0]+(8*(board_Scale/10)) && this.absPos.y > -(8*(board_Scale/10)) && this.absPos.y < DefaultSize[1]+(8*(board_Scale/10))){
 		//var box = [new PVector(this.absPos.x-abs(constrain(cos(this.rotation/90*HALF_PI)*2,1,2)*2), this.absPos.y-abs(constrain(sin(this.rotation/90*HALF_PI)*2,1,2)*2)), new PVector(this.absPos.x+abs(constrain(cos(this.rotation/90*HALF_PI)*2,1,2)*2), this.absPos.y+abs(constrain(sin(this.rotation/90*HALF_PI)*2,1,2)*2))]; // top left cord then top right cord
 		//if(this.num === 157){
 			//fill(255,0,0);
@@ -846,19 +849,19 @@ function regenCity(size, attempts, numCars, min, max) {
 
 frameRate(FR);
 
-var LightSliderVertical = new slider(width*57/64*16.5,140,width*3/32*16.5,20,2,10,2);
-var LightSliderHorizontal = new slider(width*57/64*16.5,200,width*3/32*16.5,20,2,10,2);
+var LightSliderVertical = new slider(100*57/64*16.5,140,100*3/32*16.5,20,2,10,2);
+var LightSliderHorizontal = new slider(100*57/64*16.5,200,100*3/32*16.5,20,2,10,2);
 
 function Tab() {
 	pushMatrix();
 
-	var TabWidth = width/8;
+	var TabWidth = DefaultSize[0]/8;
 	var stop = board[edditing.x][edditing.y];
 
-	translate(width-TabWidth,0);
+	translate(DefaultSize[0]-TabWidth,0);
 	fill(100,100,100,200);
 	rectMode(CORNER);
-	rect(0,-1,TabWidth,height);
+	rect(0,-1,TabWidth,DefaultSize[1]);
 
 	//draw stop light button
 	if(stop.intersection === "LIGHT"){fill(75);}else{fill(150);}
@@ -880,19 +883,19 @@ function Tab() {
 	fill(255,255,255);
 	text("STOP", 134, 55);
 
-	if(mousePressed && mouseX >= width-TabWidth+20 && mouseX <= width-TabWidth+100 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "LIGHT";}
-	if(mousePressed && mouseX >= width-TabWidth+110 && mouseX <= width-TabWidth+190 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "STOP";}
+	if(mousePressed && mouseX >= DefaultSize[0]-TabWidth+20 && mouseX <= DefaultSize[0]-TabWidth+100 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "LIGHT";}
+	if(mousePressed && mouseX >= DefaultSize[0]-TabWidth+110 && mouseX <= DefaultSize[0]-TabWidth+190 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "STOP";}
 
 	if(stop.intersection === "LIGHT"){
 		//draw text for sliders
 		fill(0,0,0,255);
 
 		textSize(18);
-		text("light wait times", width*7/256, 95);
+		text("light wait times", DefaultSize[0]*7/256, 95);
 
 		textSize(12);
-		text("Vertical time = " + LightSliderVertical.value + "s", width/128, 135);
-		text("Horizontal time = " + LightSliderHorizontal.value + "s", width/128, 185);
+		text("Vertical time = " + LightSliderVertical.value + "s", DefaultSize[0]/128, 135);
+		text("Horizontal time = " + LightSliderHorizontal.value + "s", DefaultSize[0]/128, 185);
 	}
 
 	popMatrix();
@@ -909,13 +912,16 @@ function Tab() {
 
 //buttons for menus
 var playbutton = new button(50,100,300,100,"Play",75,[50,50,255],5);
-var settingsbutton = new button(50,250,300,100,"Settings",75,[50,50,255],5);
+var instructionsbutton = new button(50,250,300,100,"Instructions",55,[50,50,255],5);
 var startbutton = new button(50,800,300,100,"Start",75,[50,50,255],5);
+var backbutton = new button(675,750,300,100,"Back",75, [50,50,255],5);
+
+var pausebutton = new button(1630,0,20,20,"",30,[50,50,255],5);
 
 //sliders for menus
 var mincitysizeslider = new slider(50,140,300,20,0.1,0.5,0.3);
 var maxcitysizeslider = new slider(50,200,300,20,0.1,0.5,0.3);
-var GridSpaceSlider = new slider(50,260,300,20,1,5,3);
+var GridSpaceSlider = new slider(50,260,300,20,1,5,1.5);
 var latched = [mincitysizeslider.value, maxcitysizeslider.value, GridSpaceSlider.value];
 
 var newCitySize = [0,0];
@@ -925,8 +931,10 @@ var GridSpaceAspectRatio = [11*2,6.3*2];
 regenCity(Size, 30, 500, 25, null);
 
 void draw(){
+	pushMatrix();
+	//scale(0.5);
 	if(screen === "MainGame"){
-		centerPos = new PVector((offset[0]-width/2)/board_Scale*10, (offset[1]-height/2)/board_Scale*10);
+		centerPos = new PVector((offset[0]-DefaultSize[0]/2)/board_Scale*10, (offset[1]-DefaultSize[1]/2)/board_Scale*10);
 		//centerPos.x = centerPos.x*(100/board_Scale); centerPos.y = centerPos.y*(100/board_Scale);
 
 		//offset = [0,0];
@@ -981,7 +989,6 @@ void draw(){
 			//	println(tile.buildings + "     :     " + buildings);
 			//	tile.buildings = buildings;
 			//}
-			
 		}
 
 		//println(board_Scale/10);
@@ -1005,7 +1012,7 @@ void draw(){
 			}
 		}
 
-		if(mousePressed && mousePressed !== pmousePressed && mouseX < width*7/8){
+		if(mousePressed && mousePressed !== pmousePressed && mouseX < DefaultSize[0]*7/8){
 			edditing = null;
 		}
 
@@ -1033,7 +1040,7 @@ void draw(){
 
 		rectMode(CENTER);
 		fill(0, 0, 0, (cos(time/3.8)+1)*70);
-		rect(width/2,height/2,width,height);
+		rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
 
 		if(edditing !== null){
 			Tab();
@@ -1043,7 +1050,8 @@ void draw(){
 
 		fill(255,0,0);
 		textSize(20);
-		text(frameRate, width-50, 20);
+		text(round(frameRate*100)/100, DefaultSize[0]-70, 20);
+
 		fill(255,255,255);
 		if(round(time%1*100) < 10){
 			text(floor(time) + ":0" + round(time%1*100), 0, 20);
@@ -1053,6 +1061,20 @@ void draw(){
 		text("Current Score " + round(averageSpeed*100), 0, 40); // Print Score
 		if(round(averageSpeed*100) > bestScore){bestScore = round(averageSpeed*100);}
 		text("Your Best is " + bestScore, 0, 60);
+
+		//Pause button
+		fill(220,220,255);
+		pausebutton.draw();
+
+		fill(0);
+		rect(1635,3,3,13);
+		rect(1641,3,3,13);
+
+		if(pausebutton.detectClick(true) === true){
+			pscreen = screen;
+			screen = "pause";
+		}
+
 		//text(offset, 0, 100);
 		//text(board_Scale, 0, 80);
 		//text(centerPos, 0, 120);
@@ -1075,15 +1097,15 @@ void draw(){
 		//println();
 		//text(board[mouseTile[0]][mouseTile[1]].cars,mouseX,mouseY);
 
-		if(keyPressed && key === 's'){
+		/*if(keyPressed && key === 's'){
 			frameRate(10);
 		}else if(keyPressed !== pkeyPressed && pkey === 's'){
 			frameRate(60);
-		}
+		}*/
 
 		if(keyPressed && key === 'c'){
-			offset = [-7*AspectRatio,-7*AspectRatio];
-			board_Scale = round(width/(Size[0])*2*1.65)/2;
+			offset = [0,0];
+			board_Scale = round(100/(Size[0])*2*1.65)/2;
 		}
 
 		if(keyPressed && key === 'o' && keyPressed !== pkeyPressed){
@@ -1094,16 +1116,16 @@ void draw(){
 		//	regenCity(Size, 400, 1000, 20, null);
 		//}
 
-		var zoomOffsetChange = new PVector((board_Scale*centerPos.x+5*width)/10,(board_Scale*centerPos.y+5*height)/10);
+		var zoomOffsetChange = new PVector((board_Scale*centerPos.x+5*DefaultSize[0])/10,(board_Scale*centerPos.y+5*DefaultSize[1])/10);
 
 		if(keyPressed && key === '='){
 			board_Scale += 0.5;
-			offset[0] = (board_Scale*centerPos.x+5*width)/10;
-			offset[1] = (board_Scale*centerPos.y+5*height)/10;
+			offset[0] = (board_Scale*centerPos.x+5*DefaultSize[0])/10;
+			offset[1] = (board_Scale*centerPos.y+5*DefaultSize[1])/10;
 		}else if(keyPressed && key === '-' && board_Scale > 2){
 			board_Scale -= 0.5;
-			offset[0] = (board_Scale*centerPos.x+(5*width))/10;
-			offset[1] = (board_Scale*centerPos.y+(5*height))/10;
+			offset[0] = (board_Scale*centerPos.x+(5*DefaultSize[0]))/10;
+			offset[1] = (board_Scale*centerPos.y+(5*DefaultSize[1]))/10;
 		}
 
 		//stroke(0);
@@ -1143,7 +1165,7 @@ void draw(){
 			}
 			rectMode(CENTER);
 			fill(0, 0, 0, (cos(time/3.8)+1)*70);
-			rect(width/2,height/2,width,height);
+			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
 
 			textSize(20);
 			fill(255,255,255);
@@ -1156,7 +1178,7 @@ void draw(){
 
 		rectMode(CENTER);
 		fill(150, 150, 150, 150);
-		rect(200, height/2, 400, height);
+		rect(200, DefaultSize[1]/2, 400, DefaultSize[1]);
 
 		fill(50,50,255);
 		textSize(50);
@@ -1165,14 +1187,16 @@ void draw(){
 		fill(220,220,255);
 		playbutton.draw();
 		if(playbutton.detectClick(true)){
+			pscreen=screen;
 			screen = "GameSetup";
 		}
 
 		fill(220,220,255);
-		//settingsbutton.draw();
-		//if(settingsbutton.detectClick(true)){
-		//	screen = "Settings";
-		//}
+		instructionsbutton.draw();
+		if(instructionsbutton.detectClick(true)){
+			pscreen=screen;
+			screen = "Instructions";
+		}
 	}else if(screen === "GameSetup"){
 		background(50,255,50);
 		if(true===true){
@@ -1207,7 +1231,7 @@ void draw(){
 			}
 			rectMode(CENTER);
 			fill(0, 0, 0, (cos(time/3.8)+1)*70);
-			rect(width/2,height/2,width,height);
+			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
 
 			textSize(20);
 			fill(255,255,255);
@@ -1220,7 +1244,7 @@ void draw(){
 
 		rectMode(CENTER);
 		fill(150, 150, 150, 150);
-		rect(200, height/2, 400, height);
+		rect(200, DefaultSize[1]/2, 400, DefaultSize[1]);
 
 		fill(50,50,255);
 		textSize(50);
@@ -1230,6 +1254,7 @@ void draw(){
 		fill(220,220,255);
 		startbutton.draw();
 		if(startbutton.detectClick(true)){
+			pscreen=screen;
 			screen = "MainGame";
 		}
 
@@ -1283,7 +1308,144 @@ void draw(){
 		text("Minimum City Size: " + textAffix[0], 200, 130);
 		text("Maximum City Size: " + textAffix[1], 200, 190);
 		text("City Limmit Size: " + round(GridSpaceSlider.value*GridSpaceAspectRatio[0]) + " X " + round(GridSpaceSlider.value*GridSpaceAspectRatio[1]), 200, 250);
+	}else if(screen === "Instructions"){
+		background(50,255,50);
+		if(true===true){
+			time+=0.01;
+			if(round(time*100)/100 >= 24){
+				time = 0;
+			}
+			if(round(time%1*100) >= 60){
+				time = round(floor(time)+1);
+			}
+			rectMode(CENTER);
+			
+			if(timer%20 === 0){
+				board[constrain(round(random(3,Size[0]-3)),3,Size[0]-3)][constrain(round(random(3,Size[1]-3)),3,Size[1]-3)].Spread();
+			}
+
+			for(var x = 0; x < board.length; x++){
+				for(var y = 0; y < board[x].length; y++){
+					board[x][y].Draw();
+					board[x][y].IntTick();
+				}
+			}
+
+			for(var i = 0; i < cars.length; i++){
+				cars[i].FindSpeed();
+			}
+
+			noStroke();
+			for(var i = 0; i < cars.length; i++){
+				cars[i].Draw();
+				cars[i].Drive();
+			}
+			rectMode(CENTER);
+			fill(0, 0, 0, (cos(time/3.8)+1)*70);
+			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
+
+			textSize(20);
+			fill(255,255,255);
+			if(round(time%1*100) < 10){
+				text(floor(time) + ":0" + round(time%1*100), 0, 20);
+			}else{
+				text(floor(time) + ":" + round(time%1*100), 0, 20);
+			}
+		} // draw background game
+
+		rectMode(CENTER);
+		fill(150, 150, 150, 150);
+		rect(DefaultSize[0]/2, DefaultSize[1]/2, 600, 800, 10);
+
+		fill(75,75,255);
+		textSize(100);
+		text("Instructions", DefaultSize[0]/2-250, DefaultSize[1]/2-300);
+
+		fill(0);
+		textSize(30);
+		text("The objective of the game is to maximize\nthe speed of traffic flowing through the\ncity. To do this, click on intersections and\ntoggle between having a stoplight and\nstopsign. From there you can modify the\nspecifics of the stop.\n\n\n\nUse your mouse to pan and '+' and '-' to\nzoom, 'c' to recenter your camera and\n'o' to toggle traffic overlay.", DefaultSize[0]/2-270, DefaultSize[1]/2-250);
+		
+		fill(220,220,255);
+		backbutton.pos = new PVector(675,750);
+		backbutton.draw();
+		if(backbutton.detectClick(true) === true){
+			screen = pscreen;
+		}
+	}else if(screen === "pause"){
+		background(50,255,50);
+		if(true===true){
+			pushMatrix();
+			translate(offset[0], offset[1]);
+			rectMode(CENTER);
+
+			if(round(time*100)/100 >= 24){
+				time = 0;
+			}
+			if(round(time%1*100) >= 60){
+				time = round(floor(time)+1);
+			}
+			rectMode(CENTER);
+			
+			if(timer%20 === 0){
+				board[constrain(round(random(3,Size[0]-3)),3,Size[0]-3)][constrain(round(random(3,Size[1]-3)),3,Size[1]-3)].Spread();
+			}
+
+			for(var x = 0; x < board.length; x++){
+				for(var y = 0; y < board[x].length; y++){
+					board[x][y].Draw();
+				}
+			}
+
+			noStroke();
+			for(var i = 0; i < cars.length; i++){
+				cars[i].Draw();
+			}
+
+			popMatrix();
+
+			rectMode(CENTER);
+			fill(0, 0, 0, (cos(time/3.8)+1)*70);
+			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
+
+			fill(255,0,0);
+			textSize(20);
+			text(round(frameRate*100)/100, DefaultSize[0]-50, 20);
+
+			fill(255,255,255);
+			if(round(time%1*100) < 10){
+				text(floor(time) + ":0" + round(time%1*100), 0, 20);
+			}else{
+				text(floor(time) + ":" + round(time%1*100), 0, 20);
+			}
+			text("Current Score " + round(averageSpeed*100), 0, 40); // Print Score
+			text("Your Best is " + bestScore, 0, 60);
+		} // draw background game
+
+		rectMode(CENTER);
+		fill(150, 150, 150, 200);
+		rect(DefaultSize[0]/2, DefaultSize[1]/2, 600, 500, 10);
+
+		fill(75,75,255);
+		textSize(100);
+		text("Paused", DefaultSize[0]/2-175, DefaultSize[1]/2-150);
+
+		fill(175,175,200);
+		backbutton.pos = new PVector(675, 600);
+		backbutton.draw();
+		if(backbutton.detectClick(true) === true){
+			pscreen = screen;
+			screen = "MainGame";
+		}
+
+		fill(175,175,200);
+		instructionsbutton.pos = new PVector(675, 450);
+		instructionsbutton.draw();
+		if(instructionsbutton.detectClick(true) === true){
+			pscreen = screen;
+			screen = "Instructions";
+		}
 	}
+	popMatrix();
 
 	//println(screen);
 
