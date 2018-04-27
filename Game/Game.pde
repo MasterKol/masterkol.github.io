@@ -449,6 +449,19 @@ piece.prototype.Draw = function() {
 			}
 			rotate(HALF_PI);
 		}
+
+		if(trafficOverlay == true){
+			var AS = 0;
+			for(var i = 0; i < this.cars.length; i++){
+				AS += cars[this.cars].speed;
+			}
+			println(AS);
+			AS = AS/this.cars.length;
+		}
+		
+		fill(255,0,0,AS*25);
+		rect(0,0,100,100);
+
 		popMatrix();
 		//fill(255,0,0);
 		//rect(this.pos.x, this.pos.y, 14*board_Scale/10, 14*board_Scale/10);
@@ -929,6 +942,7 @@ var GridSpaceAspectRatio = [11*2,6.3*2];
 regenCity(Size, 30, 500, 25, null);
 
 void draw(){
+	println(trafficOverlay);
 	if(screen === "MainGame"){
 		centerPos = new PVector((offset[0]-width/2)/board_Scale*10, (offset[1]-height/2)/board_Scale*10);
 		//centerPos.x = centerPos.x*(100/board_Scale); centerPos.y = centerPos.y*(100/board_Scale);

@@ -3,14 +3,12 @@ void setup() {
   background(50,255,50);
 }
 
-randomSeed(1);
+//randomSeed(1);
 
 var useImages = true;
 var averageSpeed = 0;
 
 var carImages = [loadImage("./Images/Car1.jpg"),loadImage("./Images/Car2.jpg"),loadImage("./Images/Car3.jpg"),loadImage("./Images/Car4.jpg")];
-
-var DefaultSize = [1650, 950];
 
 var time = 12;
 var FR = 60;
@@ -253,7 +251,7 @@ function piece(x,y,connections){
 	}
 	this.trafficValue = 0;
 	this.trafficValueHistory = [];
-	for(var i=0;i<FR*10;i++){this.trafficValueHistory.push(0);}
+	for(var i=0;i<FR*10;i++){this.trafficValueHistory.push(10);}
 }
 
 function AdjCon(x,y){
@@ -365,22 +363,27 @@ function octagon(x,y,Scale) {
 piece.prototype.Draw = function() {
 	//reset position
 	this.pos = new PVector(this.place.x*10*board_Scale+(100/board_Scale), this.place.y*10*board_Scale+(100/board_Scale));
-
-	/*this.trafficValueHistory.splice(0,1);
+	this.trafficValueHistory.splice(0,1);
 	var temp = 0;
 	for(var i = 0; i < this.cars.length; i++){
-		temp+=cars[i].speed;
+		temp+=cars[this.cars[i]].speed;
 	}
-	this.trafficValueHistory.push((temp*this.cars.length)/(averageSpeed*cars.length));
+	if(this.cars.length === 0){
+		this.trafficValueHistory.push(10);
+	}else{
+		this.trafficValueHistory.push(temp/this.cars.length);
+	}
 	this.trafficValue=0;
-	for(var i=0;i<this.trafficValueHistory.length;i++){this.trafficValue = (this.trafficValue*this.trafficValueHistory.length) + this.trafficValueHistory[i];}
-	this.trafficValue = this.trafficValue/this.trafficValueHistory.length;*/
+	for(var i=0;i<this.trafficValueHistory.length;i++){
+		this.trafficValue += this.trafficValueHistory[i];
+	}
+	this.trafficValue = this.trafficValue/this.trafficValueHistory.length;
 
-	if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < DefaultSize[0]+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < DefaultSize[1]+(50*(board_Scale/10))){
+	if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < width+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < height+(50*(board_Scale/10))){
 		var clickRad = 10;
 		if(mousePressed && mouseX >= this.pos.x+offset[0]-clickRad*board_Scale/10 && mouseX <= this.pos.x+offset[0]+clickRad*board_Scale/10 && mouseY >= this.pos.y+offset[1]-clickRad*board_Scale/10 && mouseY <= this.pos.y+offset[1]+clickRad*board_Scale/10 && this.roadnum > 2){
 			//if the center of the tile is clicked
-			if(edditing === null || edditing !== null && mouseX < DefaultSize[0]*7/8){
+			if(edditing === null || edditing !== null && mouseX < width*7/8){
 				edditing = this.place;
 			}
 		}
@@ -451,6 +454,14 @@ piece.prototype.Draw = function() {
 			}
 			rotate(HALF_PI);
 		}
+
+		if(trafficOverlay == true){
+			if(this.cars.length !== 0){
+				fill(255,0,0,constrain(100/this.trafficValue,0,200));
+				rect(0,0,101,101);
+			}
+		}
+
 		popMatrix();
 		//fill(255,0,0);
 		//rect(this.pos.x, this.pos.y, 14*board_Scale/10, 14*board_Scale/10);
@@ -573,7 +584,7 @@ Car.prototype.Draw = function(){
 	this.absPos = new PVector(this.tile.x*10*board_Scale+(100/board_Scale) + (this.pos.x*board_Scale/10) + offset[0], this.tile.y*10*board_Scale+(100/board_Scale) + (this.pos.y*board_Scale/10) + offset[1]);
 	this.timer--;
 
-	if(this.absPos.x > -(8*(board_Scale/10)) && this.absPos.x < DefaultSize[0]+(8*(board_Scale/10)) && this.absPos.y > -(8*(board_Scale/10)) && this.absPos.y < DefaultSize[1]+(8*(board_Scale/10))){
+	if(this.absPos.x > -(8*(board_Scale/10)) && this.absPos.x < width+(8*(board_Scale/10)) && this.absPos.y > -(8*(board_Scale/10)) && this.absPos.y < height+(8*(board_Scale/10))){
 		//var box = [new PVector(this.absPos.x-abs(constrain(cos(this.rotation/90*HALF_PI)*2,1,2)*2), this.absPos.y-abs(constrain(sin(this.rotation/90*HALF_PI)*2,1,2)*2)), new PVector(this.absPos.x+abs(constrain(cos(this.rotation/90*HALF_PI)*2,1,2)*2), this.absPos.y+abs(constrain(sin(this.rotation/90*HALF_PI)*2,1,2)*2))]; // top left cord then top right cord
 		//if(this.num === 157){
 			//fill(255,0,0);
@@ -602,7 +613,7 @@ Car.prototype.Draw = function(){
 		//line(2,3.5, 8,3.5)
 
 		//noStroke();
-		if(useImages === false || board_Scale/10 < 3){
+		if((useImages === false || board_Scale/10 < 3) && (board_Scale/10 < 3 && this.num < 1000)){
 			fill(this.Color[0], this.Color[1], this.Color[2]);
 			rect(0,3.5,8,4);
 		}else{
@@ -688,7 +699,7 @@ Car.prototype.Drive = function(){
 	}
 
 	if(round(this.pos.x) === 0 && round(this.pos.y) === 0 && this.turned === false){
-		//println(this.road + ", " + this.newRoad);r
+		//println(this.road + ", " + this.newRoad);
 		this.turned = true;
 		this.road = this.newRoad;
 		this.rotation = 90*this.road;
@@ -855,13 +866,13 @@ var LightSliderHorizontal = new slider(100*57/64*16.5,200,100*3/32*16.5,20,2,10,
 function Tab() {
 	pushMatrix();
 
-	var TabWidth = DefaultSize[0]/8;
+	var TabWidth = width/8;
 	var stop = board[edditing.x][edditing.y];
 
-	translate(DefaultSize[0]-TabWidth,0);
+	translate(width-TabWidth,0);
 	fill(100,100,100,200);
 	rectMode(CORNER);
-	rect(0,-1,TabWidth,DefaultSize[1]);
+	rect(0,-1,TabWidth,height);
 
 	//draw stop light button
 	if(stop.intersection === "LIGHT"){fill(75);}else{fill(150);}
@@ -883,19 +894,19 @@ function Tab() {
 	fill(255,255,255);
 	text("STOP", 134, 55);
 
-	if(mousePressed && mouseX >= DefaultSize[0]-TabWidth+20 && mouseX <= DefaultSize[0]-TabWidth+100 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "LIGHT";}
-	if(mousePressed && mouseX >= DefaultSize[0]-TabWidth+110 && mouseX <= DefaultSize[0]-TabWidth+190 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "STOP";}
+	if(mousePressed && mouseX >= width-TabWidth+20 && mouseX <= width-TabWidth+100 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "LIGHT";}
+	if(mousePressed && mouseX >= width-TabWidth+110 && mouseX <= width-TabWidth+190 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "STOP";}
 
 	if(stop.intersection === "LIGHT"){
 		//draw text for sliders
 		fill(0,0,0,255);
 
 		textSize(18);
-		text("light wait times", DefaultSize[0]*7/256, 95);
+		text("light wait times", width*7/256, 95);
 
 		textSize(12);
-		text("Vertical time = " + LightSliderVertical.value + "s", DefaultSize[0]/128, 135);
-		text("Horizontal time = " + LightSliderHorizontal.value + "s", DefaultSize[0]/128, 185);
+		text("Vertical time = " + LightSliderVertical.value + "s", width/128, 135);
+		text("Horizontal time = " + LightSliderHorizontal.value + "s", width/128, 185);
 	}
 
 	popMatrix();
@@ -931,10 +942,8 @@ var GridSpaceAspectRatio = [11*2,6.3*2];
 regenCity(Size, 30, 500, 25, null);
 
 void draw(){
-	pushMatrix();
-	//scale(0.5);
 	if(screen === "MainGame"){
-		centerPos = new PVector((offset[0]-DefaultSize[0]/2)/board_Scale*10, (offset[1]-DefaultSize[1]/2)/board_Scale*10);
+		centerPos = new PVector((offset[0]-width/2)/board_Scale*10, (offset[1]-height/2)/board_Scale*10);
 		//centerPos.x = centerPos.x*(100/board_Scale); centerPos.y = centerPos.y*(100/board_Scale);
 
 		//offset = [0,0];
@@ -1012,7 +1021,7 @@ void draw(){
 			}
 		}
 
-		if(mousePressed && mousePressed !== pmousePressed && mouseX < DefaultSize[0]*7/8){
+		if(mousePressed && mousePressed !== pmousePressed && mouseX < width*7/8){
 			edditing = null;
 		}
 
@@ -1040,7 +1049,7 @@ void draw(){
 
 		rectMode(CENTER);
 		fill(0, 0, 0, (cos(time/3.8)+1)*70);
-		rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
+		rect(width/2,height/2,width,height);
 
 		if(edditing !== null){
 			Tab();
@@ -1050,7 +1059,7 @@ void draw(){
 
 		fill(255,0,0);
 		textSize(20);
-		text(round(frameRate*100)/100, DefaultSize[0]-70, 20);
+		text(round(frameRate*100)/100, width-70, 20);
 
 		fill(255,255,255);
 		if(round(time%1*100) < 10){
@@ -1116,16 +1125,16 @@ void draw(){
 		//	regenCity(Size, 400, 1000, 20, null);
 		//}
 
-		var zoomOffsetChange = new PVector((board_Scale*centerPos.x+5*DefaultSize[0])/10,(board_Scale*centerPos.y+5*DefaultSize[1])/10);
+		var zoomOffsetChange = new PVector((board_Scale*centerPos.x+5*width)/10,(board_Scale*centerPos.y+5*height)/10);
 
 		if(keyPressed && key === '='){
 			board_Scale += 0.5;
-			offset[0] = (board_Scale*centerPos.x+5*DefaultSize[0])/10;
-			offset[1] = (board_Scale*centerPos.y+5*DefaultSize[1])/10;
+			offset[0] = (board_Scale*centerPos.x+5*width)/10;
+			offset[1] = (board_Scale*centerPos.y+5*height)/10;
 		}else if(keyPressed && key === '-' && board_Scale > 2){
 			board_Scale -= 0.5;
-			offset[0] = (board_Scale*centerPos.x+(5*DefaultSize[0]))/10;
-			offset[1] = (board_Scale*centerPos.y+(5*DefaultSize[1]))/10;
+			offset[0] = (board_Scale*centerPos.x+(5*width))/10;
+			offset[1] = (board_Scale*centerPos.y+(5*height))/10;
 		}
 
 		//stroke(0);
@@ -1134,6 +1143,9 @@ void draw(){
 	}else if(screen === "MainMenu"){
 		background(50,255,50);
 		if(true===true){
+			pushMatrix();
+			translate(offset[0], offset[1]);
+			rectMode(CENTER);
 			time+=0.01;
 			if(round(time*100)/100 >= 24){
 				time = 0;
@@ -1141,7 +1153,6 @@ void draw(){
 			if(round(time%1*100) >= 60){
 				time = round(floor(time)+1);
 			}
-			rectMode(CENTER);
 			
 			if(timer%20 === 0){
 				board[constrain(round(random(3,Size[0]-3)),3,Size[0]-3)][constrain(round(random(3,Size[1]-3)),3,Size[1]-3)].Spread();
@@ -1163,9 +1174,12 @@ void draw(){
 				cars[i].Draw();
 				cars[i].Drive();
 			}
+
+			popMatrix();
+
 			rectMode(CENTER);
 			fill(0, 0, 0, (cos(time/3.8)+1)*70);
-			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
+			rect(width/2,height/2,width,height);
 
 			textSize(20);
 			fill(255,255,255);
@@ -1178,7 +1192,7 @@ void draw(){
 
 		rectMode(CENTER);
 		fill(150, 150, 150, 150);
-		rect(200, DefaultSize[1]/2, 400, DefaultSize[1]);
+		rect(200, height/2, 400, height);
 
 		fill(50,50,255);
 		textSize(50);
@@ -1200,6 +1214,9 @@ void draw(){
 	}else if(screen === "GameSetup"){
 		background(50,255,50);
 		if(true===true){
+			pushMatrix();
+			translate(offset[0], offset[1]);
+			rectMode(CENTER);
 			time+=0.01;
 			if(round(time*100)/100 >= 24){
 				time = 0;
@@ -1207,7 +1224,6 @@ void draw(){
 			if(round(time%1*100) >= 60){
 				time = round(floor(time)+1);
 			}
-			rectMode(CENTER);
 			
 			if(timer%20 === 0){
 				board[constrain(round(random(3,Size[0]-3)),3,Size[0]-3)][constrain(round(random(3,Size[1]-3)),3,Size[1]-3)].Spread();
@@ -1229,9 +1245,12 @@ void draw(){
 				cars[i].Draw();
 				cars[i].Drive();
 			}
+
+			popMatrix();
+
 			rectMode(CENTER);
 			fill(0, 0, 0, (cos(time/3.8)+1)*70);
-			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
+			rect(width/2,height/2,width,height);
 
 			textSize(20);
 			fill(255,255,255);
@@ -1244,7 +1263,7 @@ void draw(){
 
 		rectMode(CENTER);
 		fill(150, 150, 150, 150);
-		rect(200, DefaultSize[1]/2, 400, DefaultSize[1]);
+		rect(200, height/2, 400, height);
 
 		fill(50,50,255);
 		textSize(50);
@@ -1311,14 +1330,16 @@ void draw(){
 	}else if(screen === "Instructions"){
 		background(50,255,50);
 		if(true===true){
-			time+=0.01;
+			pushMatrix();
+			translate(offset[0], offset[1]);
+			rectMode(CENTER);
+			if(pscreen!=="pause"){time+=0.01;}
 			if(round(time*100)/100 >= 24){
 				time = 0;
 			}
 			if(round(time%1*100) >= 60){
 				time = round(floor(time)+1);
 			}
-			rectMode(CENTER);
 			
 			if(timer%20 === 0){
 				board[constrain(round(random(3,Size[0]-3)),3,Size[0]-3)][constrain(round(random(3,Size[1]-3)),3,Size[1]-3)].Spread();
@@ -1327,22 +1348,27 @@ void draw(){
 			for(var x = 0; x < board.length; x++){
 				for(var y = 0; y < board[x].length; y++){
 					board[x][y].Draw();
-					board[x][y].IntTick();
+					if(pscreen!=="pause"){board[x][y].IntTick();}
 				}
 			}
 
-			for(var i = 0; i < cars.length; i++){
-				cars[i].FindSpeed();
+			if(pscreen!=="pause"){
+				for(var i = 0; i < cars.length; i++){
+					cars[i].FindSpeed();
+				}
 			}
 
 			noStroke();
 			for(var i = 0; i < cars.length; i++){
 				cars[i].Draw();
-				cars[i].Drive();
+				if(pscreen!=="pause"){cars[i].Drive();}
 			}
+
+			popMatrix();
+
 			rectMode(CENTER);
 			fill(0, 0, 0, (cos(time/3.8)+1)*70);
-			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
+			rect(width/2,height/2,width,height);
 
 			textSize(20);
 			fill(255,255,255);
@@ -1351,19 +1377,24 @@ void draw(){
 			}else{
 				text(floor(time) + ":" + round(time%1*100), 0, 20);
 			}
+
+			if(pscreen === "pause"){
+				text("Current Score " + round(averageSpeed*100), 0, 40); // Print Score
+				text("Your Best is " + bestScore, 0, 60);
+			}
 		} // draw background game
 
 		rectMode(CENTER);
 		fill(150, 150, 150, 150);
-		rect(DefaultSize[0]/2, DefaultSize[1]/2, 600, 800, 10);
+		rect(width/2, height/2, 600, 800, 10);
 
 		fill(75,75,255);
 		textSize(100);
-		text("Instructions", DefaultSize[0]/2-250, DefaultSize[1]/2-300);
+		text("Instructions", width/2-250, height/2-300);
 
 		fill(0);
 		textSize(30);
-		text("The objective of the game is to maximize\nthe speed of traffic flowing through the\ncity. To do this, click on intersections and\ntoggle between having a stoplight and\nstopsign. From there you can modify the\nspecifics of the stop.\n\n\n\nUse your mouse to pan and '+' and '-' to\nzoom, 'c' to recenter your camera and\n'o' to toggle traffic overlay.", DefaultSize[0]/2-270, DefaultSize[1]/2-250);
+		text("The objective of the game is to maximize\nthe speed of traffic flowing through the\ncity. To do this, click on intersections and\ntoggle between having a stoplight and\nstopsign. From there you can modify the\nspecifics of the stop.\n\n\n\nUse your mouse to pan and '+' and '-' to\nzoom, 'c' to recenter your camera and\n'o' to toggle traffic overlay.", width/2-270, height/2-250);
 		
 		fill(220,220,255);
 		backbutton.pos = new PVector(675,750);
@@ -1405,11 +1436,11 @@ void draw(){
 
 			rectMode(CENTER);
 			fill(0, 0, 0, (cos(time/3.8)+1)*70);
-			rect(DefaultSize[0]/2,DefaultSize[1]/2,DefaultSize[0],DefaultSize[1]);
+			rect(width/2,height/2,width,height);
 
 			fill(255,0,0);
 			textSize(20);
-			text(round(frameRate*100)/100, DefaultSize[0]-50, 20);
+			text(round(frameRate*100)/100, width-50, 20);
 
 			fill(255,255,255);
 			if(round(time%1*100) < 10){
@@ -1423,11 +1454,11 @@ void draw(){
 
 		rectMode(CENTER);
 		fill(150, 150, 150, 200);
-		rect(DefaultSize[0]/2, DefaultSize[1]/2, 600, 500, 10);
+		rect(width/2, height/2, 600, 500, 10);
 
 		fill(75,75,255);
 		textSize(100);
-		text("Paused", DefaultSize[0]/2-175, DefaultSize[1]/2-150);
+		text("Paused", width/2-175, height/2-150);
 
 		fill(175,175,200);
 		backbutton.pos = new PVector(675, 600);
@@ -1445,7 +1476,6 @@ void draw(){
 			screen = "Instructions";
 		}
 	}
-	popMatrix();
 
 	//println(screen);
 
