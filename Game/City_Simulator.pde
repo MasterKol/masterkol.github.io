@@ -946,8 +946,8 @@ function Tab() {
 	fill(255,255,255);
 	text("STOP", 134, 55);
 
-	if(mousePressed && mouseX >= width-TabWidth+20 && mouseX <= width-TabWidth+100 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "LIGHT";}
-	if(mousePressed && mouseX >= width-TabWidth+110 && mouseX <= width-TabWidth+190 && mouseY >= 30 && mouseY <= 60 && mousePressed !== pmousePressed){stop.intersection = "STOP";}
+	if(mousePressed && mouseX >= width-TabWidth+20 && mouseX <= width-TabWidth+100 && mouseY >= 30 && mouseY <= 80 && mousePressed !== pmousePressed){stop.intersection = "LIGHT";}
+	if(mousePressed && mouseX >= width-TabWidth+110 && mouseX <= width-TabWidth+190 && mouseY >= 30 && mouseY <= 80 && mousePressed !== pmousePressed){stop.intersection = "STOP";}
 
 	if(stop.intersection === "LIGHT"){
 		//draw text for sliders
@@ -1446,7 +1446,7 @@ void draw(){
 
 		fill(0);
 		textSize(30);
-		text("The objective of the game is to maximize\nthe speed of traffic flowing through the\ncity. To do this, click on intersections and\ntoggle between having a stoplight and\nstopsign. From there you can modify the\nspecifics of the stop.\n\n\n\nUse your mouse to pan and '+' and '-' to\nzoom, 'c' to recenter your camera and\n'o' to toggle traffic overlay.", width/2-270, height/2-250);
+		text("The objective of the game is to maximize\nthe speed of traffic flowing through the\ncity. To do this, click on intersections and\ntoggle between having a stoplight and\nstopsign. From there you can modify the\nspecifics of the stop.\n\n\n\nUse your mouse to pan and '+' and '-' to\nzoom, 'c' to recenter your camera and\n'o' to toggle traffic density overlay.", width/2-270, height/2-250);
 		
 		fill(220,220,255);
 		backbutton.pos = new PVector(675,750);
