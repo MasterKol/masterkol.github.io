@@ -33,17 +33,37 @@
 }
 
 .Text1 {
-    display: inline;
     margin-left: 20%;
     font-family: 'Tajawal', sans-serif;
     color: #b5b5b5;
     font-size: 10px;
-    max-width: 30%;
-    float: left;
+    max-width: 70%;
 }
 
-.Text1 p{
+.caption {
+    font-size: 15px;
+    font-family: 'Tajawal', sans-serif;
+    color: #b5b5b5;
+}
+
+.link {
+    text-decoration: none;
+    color: #6897e2;
     font-size: 20px;
+}
+
+.SubHeader{
+    font-family: 'Tajawal', sans-serif;
+    color: #939393;
+    font-size: 30px;
+}
+
+.normaltext {
+    font-size: 20px;
+}
+
+hr {
+    color: #b5b5b5;
 }
 
 body {

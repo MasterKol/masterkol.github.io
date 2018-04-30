@@ -3,7 +3,7 @@ void setup() {
   background(50,255,50);
 }
 
-//randomSeed(1);
+randomSeed(1);
 
 var useImages = true;
 var averageSpeed = 0;
@@ -12,6 +12,9 @@ var carImages = [loadImage("./Images/Car1.jpg"),loadImage("./Images/Car2.jpg"),l
 
 var time = 12;
 var FR = 60;
+
+var quickCos = [1,0,-1,0];
+var quickSin = [0,-1,0,1];
 
 var AspectRatio = 2;
 var Size = [round(16.5*AspectRatio),round(9.5*AspectRatio)];
@@ -181,7 +184,7 @@ function GetAdjConnections(x,y) {
 
 function GenAdj(x,y,depth,maxDepth) {
 	if(ArraysEqual(board[x][y], [0,0,0,0]) === false && depth < maxDepth && x >= 4 && x <= Size[0]-4 && y >= 4 && y <= Size[1]-4){
-		var probability = 1.2-(Dist(x,y,origin[0],origin[1])/50);
+		var probability = 1.2;
 		if(ArraysEqual(board[x+1][y], [0,0,0,0]) && board[x][y][0] === 1 && x < Size[0]-2){
 			board[x+1][y] = [round(random(0,probability)), round(random(0,probability)), 1, round(random(0,probability))];
 			GenAdj(x+1,y,depth+1,maxDepth);
@@ -414,7 +417,7 @@ piece.prototype.Draw = function() {
 		for(var i = 0; i < this.connections.length; i++){
 			if(this.connections[i] === 1){
 				fill(150);
-				rect(22,0,58,14);
+				rect(21.5,0,57,14);
 				fill(255,255,0);
 				rect(12, 0, 10, 2);
 				rect(37, 0, 10, 2);
@@ -474,7 +477,7 @@ function FindCIF(that) { // CIF = Car in front
 	
 	for(var i = 0; i < valid.length; i++){ // find all cars in the same tile that have the same rotation
 		var a = cars[valid[i]];
-		if(that.rotation === a.rotation && that.num !== cars[valid[i]].num){//(that.pos.x*cos(that.rotation) >= a.pos.x+abs(cos(a.rotation)+1)*4 && that.pos.x*cos(that.rotation) <= a.pos.x-abs(cos(a.rotation)+1)*4 && (that.rotation+180)%360 !== a.rotation) || (that.pos.y*sin(that.rotation) <= a.pos.y+abs(sin(a.rotation)+1)*4 && that.pos.y*sin(that.rotation) >= a.pos.y-abs(sin(a.rotation)+1)*4 && (that.rotation+180)%360 !== a.rotation) || 
+		if(round(that.rotation) === round(a.rotation) && that.num !== cars[valid[i]].num){//(that.pos.x*cos(that.rotation) >= a.pos.x+abs(cos(a.rotation)+1)*4 && that.pos.x*cos(that.rotation) <= a.pos.x-abs(cos(a.rotation)+1)*4 && (that.rotation+180)%360 !== a.rotation) || (that.pos.y*sin(that.rotation) <= a.pos.y+abs(sin(a.rotation)+1)*4 && that.pos.y*sin(that.rotation) >= a.pos.y-abs(sin(a.rotation)+1)*4 && (that.rotation+180)%360 !== a.rotation) || 
 			nvalid.push(valid[i]);
 		}
 	}
@@ -546,6 +549,46 @@ function FindCIF(that) { // CIF = Car in front
 	return CIF;
 }
 
+function TurnPos(that) {
+	if(that.road === (that.newRoad+1)%4){
+		return [round(cos(that.rotation/180*PI)*4), round(sin(that.rotation/180*PI)*4)];
+		println("left");
+	}else if(that.road === (that.newRoad+3)%4){
+		return [round(-cos(that.rotation/180*PI)*4), round(-sin(that.rotation/180*PI)*4)];
+		println("right");
+	}else{
+		return [0,0];
+		println("straight/turnaround");
+	}
+}
+
+/*function FindCIF(that) {
+	var CIF = -1;
+	var temp = 1000;
+	var valid = board[that.tile.x][that.tile.y].cars;
+	var Turn = TurnPos(that);
+	var nvalid = [];
+
+	for(var i = 0; i < valid.length; i++){
+		var a = cars[valid[i]];
+		if(round(that.rotation) === round(a.rotation) && that.num !== cars[valid[i]].num && (a.pos.x+a.pos.y)*(quickSin[that.rotation/90]+quickCos[a.rotation/90]) > (Turn[0]+Turn[1])){
+			nvalid.push(valid[i]);
+		}
+	}
+	valid = nvalid;
+
+	for(var i = 0; i < valid.length; i++){
+		var dist = -((cars[valid[i]].pos.x+cars[valid[i]].pos.y)-(that.pos.x+that.pos.y));
+		//println(that.num + ", " + dist);
+		if(temp < dist && dist > 0){
+			temp = dist;
+			CIF = valid[i];
+		}
+	}
+
+	return [CIF,temp];
+}*/
+
 function Car(x, y, road){
 	this.tile = new PVector(x,y);
 	this.pos = new PVector(0, 0);
@@ -577,7 +620,8 @@ function Car(x, y, road){
 	this.turned = false;
 	this.stopTime = round(random(0.1,1)*10)/10;
 	this.stopTimer = 0;
-	this.CIF = [0,0,0];
+	this.CIF = -1;
+	this.turnpos = TurnPos(this);
 }
 
 Car.prototype.Draw = function(){
@@ -604,8 +648,11 @@ Car.prototype.Draw = function(){
 		//if(this.num === 157){
 		//	fill(255,0,0);
 		//	textSize(12);
-			//text("Information for car #" + this.num + "\npos: " + this.pos + "\nroad: " + this.road + ", " + this.newRoad + "\nspeed: " + this.speed + "\ntile: " + this.tile + "\nrotation: " + this.rotation + "\nnew Y: " + round((this.pos.y+sin(this.rotation/180*PI)*constrain(this.speed,0,this.maxSpeed)/10)*10)/10, 0, 0);
+		//	text("Information for car #" + this.num + "\npos: " + this.pos + "\nroad: " + this.road + ", " + this.newRoad + "\nspeed: " + this.speed + "\ntile: " + this.tile + "\nrotation: " + this.rotation + "\nnew Y: " + round((this.pos.y+sin(this.rotation/180*PI)*constrain(this.speed,0,this.maxSpeed)/10)*10)/10, 0, 0);
 		//}
+
+		//fill(255,0,0);
+		//text(this.road + ", " + this.newRoad + ", " + (this.road === (this.newRoad+1)%4), 0, 0);
 
 		rotate(this.rotation/180*PI);
 		scale(board_Scale/10);
@@ -613,7 +660,7 @@ Car.prototype.Draw = function(){
 		//line(2,3.5, 8,3.5)
 
 		//noStroke();
-		if((useImages === false || board_Scale/10 < 3) && (board_Scale/10 < 3 && this.num < 1000)){
+		if(useImages === false || board_Scale/10 < 3){
 			fill(this.Color[0], this.Color[1], this.Color[2]);
 			rect(0,3.5,8,4);
 		}else{
@@ -621,7 +668,7 @@ Car.prototype.Draw = function(){
 		}
 
 		rotate(-this.rotation/180*PI);
-		this.CIF = FindCIF(this);
+
 		//fill(255,0,0);
 		//textSize(2);
 		//text(this.num + ", " + this.CIF[0], -3.5*sin(this.rotation/180*PI), 3.5*cos(this.rotation/180*PI));
@@ -673,6 +720,7 @@ Car.prototype.Drive = function(){
 		board[this.tile.x][this.tile.y].cars.push(this.num);
 		this.newRoad = PickDir(this.tile.x,this.tile.y,this.road);
 		this.turned = false;
+		this.turnpos = TurnPos(this);
 	}else if(this.pos.x > 50){
 		this.pos.x = -50;
 		board[this.tile.x][this.tile.y].cars = RemoveInstances(this.num, board[this.tile.x][this.tile.y].cars);
@@ -680,6 +728,7 @@ Car.prototype.Drive = function(){
 		board[this.tile.x][this.tile.y].cars.push(this.num);
 		this.newRoad = PickDir(this.tile.x,this.tile.y,this.road);
 		this.turned = false;
+		this.turnpos = TurnPos(this);
 	}
 
 	if(this.pos.y < -50){
@@ -689,6 +738,7 @@ Car.prototype.Drive = function(){
 		board[this.tile.x][this.tile.y].cars.push(this.num);
 		this.newRoad = PickDir(this.tile.x,this.tile.y,this.road);
 		this.turned = false;
+		this.turnpos = TurnPos(this);
 	}else if(this.pos.y > 50){
 		this.pos.y = -50;
 		board[this.tile.x][this.tile.y].cars = RemoveInstances(this.num, board[this.tile.x][this.tile.y].cars);
@@ -696,15 +746,16 @@ Car.prototype.Drive = function(){
 		board[this.tile.x][this.tile.y].cars.push(this.num);
 		this.newRoad = PickDir(this.tile.x,this.tile.y,this.road);
 		this.turned = false;
+		this.turnpos = TurnPos(this);
 	}
 
-	if(round(this.pos.x) === 0 && round(this.pos.y) === 0 && this.turned === false){
+	if(round(this.pos.x) === this.turnpos[0] && round(this.pos.y) === this.turnpos[1] && this.turned === false){
 		//println(this.road + ", " + this.newRoad);
 		this.turned = true;
 		this.road = this.newRoad;
 		this.rotation = 90*this.road;
-		this.pos.x = 0;
-		this.pos.y = 0;
+		this.pos.x = this.turnpos[1];
+		this.pos.y = -this.turnpos[0];
 		this.stopTimer = 0;
 	}
 };
@@ -725,27 +776,24 @@ function FindInt(that) {
 }
 
 Car.prototype.FindSpeed = function() {
-	this.CIF = FindCIF(this);//stores the value of the car ahead of the current car 
+	this.CIF = FindCIF(this); //stores the value of the car ahead of the current car 
+	this.CIFdist = this.CIF[1];
+	this.CIF = cars[this.CIF[0]];
 
-	if(this.CIF[0] === -1){
-		this.speed = 10;
-	}else if(this.rotation === cars[this.CIF[0]].rotation){
-		this.CIFdist = this.CIF[1];
-		//println(this.CIFdist);
-		this.CIF = cars[this.CIF[0]];
-		if(this.CIFdist < 13){
-			this.speed = constrain(constrain(this.CIF.speed,0,this.CIF.maxSpeed)-1,0,10);
-		}else if(this.CIFdist < 15){
-			this.speed = constrain(this.CIF.speed,0,this.CIF.maxSpeed);
-		}else if(this.CIFdist < 50){
-			this.speed = constrain(constrain(this.CIF.speed,0,this.CIF.maxSpeed)+ceil(this.CIFdist/5)/2,0,10);
-		}else{
-			this.speed = constrain(this.speed+0.5,0,10);
-		}
+	//println(this.CIF + ", " + this.CIFdist);
+
+	if(this.CIFdist === -1){
+		this.speed = constrain(this.speed+0.5,0,10);
+	}else if(this.CIFdist < 5){
+		this.speed = 0;
+	}else if(this.CIFdist < 13){
+		this.speed = constrain(constrain(this.CIF.speed,0,this.CIF.maxSpeed)-1,0,10);
+	}else if(this.CIFdist < 15){
+		this.speed = constrain(this.CIF.speed,0,this.CIF.maxSpeed);
+	}else if(this.CIFdist < 50){
+		this.speed = constrain(constrain(this.CIF.speed,0,this.CIF.maxSpeed)+ceil(this.CIFdist/5)/2,0,10);
 	}else{
-		if(this.CIFdist < 5){
-			this.speed = 0;
-		}
+		this.speed = 10;
 	}
 	
 	this.Int = FindInt(this);
@@ -763,7 +811,7 @@ Car.prototype.FindSpeed = function() {
 		}
 	}
 
-	averageSpeed += constrain(this.speed,0,this.maxSpeed);
+	averageSpeed += constrain(this.speed,0,this.maxSpeed)/this.maxSpeed*10;
 };
 
 function CreateCar(){
@@ -838,9 +886,12 @@ function regenCity(size, attempts, numCars, min, max) {
 		}
 	}
 
-	for(var i = 0; i < numCars; i++){
+	for(var i = 0; i < 1000; i++){
 		CreateCar();
 	}
+
+	//cars.push(new Car(12,12,0));
+	//cars.push(new Car(12,12,0));
 
 	var intersections = 0;
 	for(var x = 0; x < board.length; x++){
@@ -859,6 +910,7 @@ function regenCity(size, attempts, numCars, min, max) {
 }
 
 frameRate(FR);
+frameRate(60);
 
 var LightSliderVertical = new slider(100*57/64*16.5,140,100*3/32*16.5,20,2,10,2);
 var LightSliderHorizontal = new slider(100*57/64*16.5,200,100*3/32*16.5,20,2,10,2);
@@ -981,7 +1033,7 @@ void draw(){
 			offset[1] += mouseY-pmouseY;
 		}
 
-		if(timer%20 === 0){
+		if(timer%round((-0.001595*(Size[0]*Size[1])+11.00))*2 === 0){
 			board[constrain(round(random(3,Size[0]-3)),3,Size[0]-3)][constrain(round(random(3,Size[1]-3)),3,Size[1]-3)].Spread();
 
 			intersections = 0;
@@ -1006,7 +1058,7 @@ void draw(){
 		//	println(frameRate);
 		//}
 
-		if(timer%20 === 0 && round(random(0,1)) === 1 && cars.length < 300){
+		if(timer%20 === 0 && round(random(0,1)) === 1){
 			CreateCar();
 		}
 		
