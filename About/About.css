@@ -62,6 +62,12 @@
     font-size: 20px;
 }
 
+.name{
+    vertical-align: text-bottom;
+    margin-top: 25%;
+    margin-right: 5%;
+}
+
 hr {
     color: #b5b5b5;
 }

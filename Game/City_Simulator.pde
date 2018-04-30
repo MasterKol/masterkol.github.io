@@ -5,6 +5,15 @@ void setup() {
 
 //randomSeed(1);
 
+/*******************************************************************************************************************************************************************
+  _  __     _    _____                     _                           
+ | |/ /    | |  / ____|                   | |                          
+ | ' / ___ | | | |  __ _ __ ___  ___ _ __ | |__   __ _ _   _ _ __ ___  
+ |  < / _ \| | | | |_ | '__/ _ \/ _ \ '_ \| '_ \ / _` | | | | '_ ` _ \ 
+ | . \ (_) | | | |__| | | |  __/  __/ | | | |_) | (_| | |_| | | | | | |
+ |_|\_\___/|_|  \_____|_|  \___|\___|_| |_|_.__/ \__,_|\__,_|_| |_| |_|                                                                       
+********************************************************************************************************************************************************************/
+
 var useImages = true;
 var averageSpeed = 0;
 
@@ -405,7 +414,7 @@ piece.prototype.Draw = function() {
 		//	fill(255,0,0);
 		//	rect(0,0,40,40);
 		//}
-
+		//By Kol Greenbaum
 		//stroke(255,0,0);
 		//line(0,-50,0,50);
 		//line(-50,0,50,0);
@@ -476,7 +485,7 @@ function FindCIF(that) { // CIF = Car in front
 	var nvalid = [];
 	
 	for(var i = 0; i < valid.length; i++){ // find all cars in the same tile that have the same rotation
-		var a = cars[valid[i]];
+		var a = cars[valid[i]]; //KG
 		if(round(that.rotation) === round(a.rotation) && that.num !== cars[valid[i]].num){//(that.pos.x*cos(that.rotation) >= a.pos.x+abs(cos(a.rotation)+1)*4 && that.pos.x*cos(that.rotation) <= a.pos.x-abs(cos(a.rotation)+1)*4 && (that.rotation+180)%360 !== a.rotation) || (that.pos.y*sin(that.rotation) <= a.pos.y+abs(sin(a.rotation)+1)*4 && that.pos.y*sin(that.rotation) >= a.pos.y-abs(sin(a.rotation)+1)*4 && (that.rotation+180)%360 !== a.rotation) || 
 			nvalid.push(valid[i]);
 		}
@@ -1153,7 +1162,7 @@ void draw(){
 				text((floor(time) + ":" + round((time)%1*100)), 0, 20);
 			}
 		}*/
-
+		//By Kol Greenbaum
 		//println(width);
 		//println();
 		//text(board[mouseTile[0]][mouseTile[1]].cars,mouseX,mouseY);
