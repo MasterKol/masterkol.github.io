@@ -3,7 +3,7 @@ void setup() {
   background(50,255,50);
 }
 
-randomSeed(1);
+//randomSeed(1);
 
 var useImages = true;
 var averageSpeed = 0;
