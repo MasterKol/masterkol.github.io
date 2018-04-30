@@ -32,7 +32,7 @@ var pmousePressed = false;
 var pkeyPressed = false;
 var pkey = '';
 var intersections = 0;
-var screen = "MainMenu"; // can be "MainMenu", "MainGame", "GamePaused", "GameSetup", "Instructions"
+var screen = "MainGame"; // can be "MainMenu", "MainGame", "GamePaused", "GameSetup", "Instructions"
 var pscreen = "MainMenu";
 var cars = [];
 var spots = [];
@@ -384,7 +384,7 @@ piece.prototype.Draw = function() {
 
 	if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < width+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < height+(50*(board_Scale/10))){
 		var clickRad = 10;
-		if(mousePressed && mouseX >= this.pos.x+offset[0]-clickRad*board_Scale/10 && mouseX <= this.pos.x+offset[0]+clickRad*board_Scale/10 && mouseY >= this.pos.y+offset[1]-clickRad*board_Scale/10 && mouseY <= this.pos.y+offset[1]+clickRad*board_Scale/10 && this.roadnum > 2){
+		if(mousePressed && mouseX >= this.pos.x+offset[0]-clickRad*board_Scale/10 && mouseX <= this.pos.x+offset[0]+clickRad*board_Scale/10 && mouseY >= this.pos.y+offset[1]-clickRad*board_Scale/10 && mouseY <= this.pos.y+offset[1]+clickRad*board_Scale/10 && this.roadnum > 2 && edditing === null){
 			//if the center of the tile is clicked
 			if(edditing === null || edditing !== null && mouseX < width*7/8){
 				edditing = this.place;
