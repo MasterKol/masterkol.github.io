@@ -375,21 +375,23 @@ function octagon(x,y,Scale) {
 piece.prototype.Draw = function() {
 	//reset position
 	this.pos = new PVector(this.place.x*10*board_Scale+(100/board_Scale), this.place.y*10*board_Scale+(100/board_Scale));
-	this.trafficValueHistory.splice(0,1);
-	var temp = 0;
-	for(var i = 0; i < this.cars.length; i++){
-		temp+=cars[this.cars[i]].speed;
+	if(screen !== "pause"){
+		this.trafficValueHistory.splice(0,1);
+		var temp = 0;
+		for(var i = 0; i < this.cars.length; i++){
+			temp+=cars[this.cars[i]].speed;
+		}
+		if(this.cars.length === 0){
+			this.trafficValueHistory.push(10);
+		}else{
+			this.trafficValueHistory.push(temp/this.cars.length);
+		}
+		this.trafficValue=0;
+		for(var i=0;i<this.trafficValueHistory.length;i++){
+			this.trafficValue += this.trafficValueHistory[i];
+		}
+		this.trafficValue = this.trafficValue/this.trafficValueHistory.length;
 	}
-	if(this.cars.length === 0){
-		this.trafficValueHistory.push(10);
-	}else{
-		this.trafficValueHistory.push(temp/this.cars.length);
-	}
-	this.trafficValue=0;
-	for(var i=0;i<this.trafficValueHistory.length;i++){
-		this.trafficValue += this.trafficValueHistory[i];
-	}
-	this.trafficValue = this.trafficValue/this.trafficValueHistory.length;
 
 	if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < width+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < height+(50*(board_Scale/10))){
 		var clickRad = 10;
@@ -467,7 +469,7 @@ piece.prototype.Draw = function() {
 			rotate(HALF_PI);
 		}
 
-		if(trafficOverlay == true && screen !== "pause"){
+		if(trafficOverlay == true){
 			if(this.cars.length !== 0){
 				fill(255,0,0,constrain(100/this.trafficValue,0,200));
 				rect(0,0,101,101);
