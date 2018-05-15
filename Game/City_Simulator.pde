@@ -467,7 +467,7 @@ piece.prototype.Draw = function() {
 			rotate(HALF_PI);
 		}
 
-		if(trafficOverlay == true){
+		if(trafficOverlay == true && screen !== "pause"){
 			if(this.cars.length !== 0){
 				fill(255,0,0,constrain(100/this.trafficValue,0,200));
 				rect(0,0,101,101);
