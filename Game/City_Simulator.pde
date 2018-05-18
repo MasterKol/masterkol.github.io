@@ -374,8 +374,8 @@ function octagon(x,y,Scale) {
 
 piece.prototype.Draw = function() {
 	//reset position
-	this.pos = new PVector(this.place.x*10*board_Scale+(100/board_Scale), this.place.y*10*board_Scale+(100/board_Scale));
-	if(screen !== "pause"){
+	if(ArraysEqual(this.connections, [0,0,0,0]) === false){
+		this.pos = new PVector(this.place.x*10*board_Scale+(100/board_Scale), this.place.y*10*board_Scale+(100/board_Scale));
 		this.trafficValueHistory.splice(0,1);
 		var temp = 0;
 		for(var i = 0; i < this.cars.length; i++){
@@ -391,94 +391,94 @@ piece.prototype.Draw = function() {
 			this.trafficValue += this.trafficValueHistory[i];
 		}
 		this.trafficValue = this.trafficValue/this.trafficValueHistory.length;
-	}
 
-	if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < width+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < height+(50*(board_Scale/10))){
-		var clickRad = 10;
-		if(mousePressed && mouseX >= this.pos.x+offset[0]-clickRad*board_Scale/10 && mouseX <= this.pos.x+offset[0]+clickRad*board_Scale/10 && mouseY >= this.pos.y+offset[1]-clickRad*board_Scale/10 && mouseY <= this.pos.y+offset[1]+clickRad*board_Scale/10 && this.roadnum > 2 && edditing === null){
-			//if the center of the tile is clicked
-			if(edditing === null || edditing !== null && mouseX < width*7/8){
-				edditing = this.place;
-			}
-		}
-
-		//translate and scale properly. Can draw between (-50,-50) and (50,50)
-
-		pushMatrix();
-		translate(this.pos.x, this.pos.y);
-		scale(board_Scale/10);
-
-		noStroke();
-		fill(50,255,50);
-		rect(0, 0, 100, 100);
-
-		//if(this.place.x === origin[0] && this.place.y === origin[1]){
-		//	fill(255,0,0);
-		//	rect(0,0,40,40);
-		//}
-		//By Kol Greenbaum
-		//stroke(255,0,0);
-		//line(0,-50,0,50);
-		//line(-50,0,50,0);
-		//noStroke();
-
-		if(this.roadnum <= 2){
-			this.roadnum = 0;
-		}
-		for(var i = 0; i < this.connections.length; i++){
-			if(this.connections[i] === 1){
-				fill(150);
-				rect(21.5,0,57,14);
-				fill(255,255,0);
-				rect(12, 0, 10, 2);
-				rect(37, 0, 10, 2);
-
-				if(this.buildings[i][0] === 1){
-					fill(this.buildings[i][1]);
-					rect(32,-32,30,30);
-				}
-				
-				if(this.roadnum > 2){
-					if(this.intersection === "STOP"){
-						fill(255,0,0);
-						octagon(14, -10, 0.5);
-						if(board_Scale > 20){
-							rotate(-HALF_PI);
-							textSize(1.5);
-							fill(255);
-							text("STOP",8,14.5);
-							rotate(HALF_PI);
-						}else{
-							fill(255);
-							rect(13.75,-10,1,3);
-						}
-					}
-
-					if(this.intersection === "LIGHT"){
-						if(this.Dir === i%2){
-							fill(0, 128, 0);
-						}else{
-							fill(255, 0, 0);
-						}
-						rect(14,-10,4,4);
-					}
-				}else{
-					this.roadnum++;
+		if(this.pos.x+offset[0] > -(50*(board_Scale/10)) && this.pos.x+offset[0] < width+(50*(board_Scale/10)) && this.pos.y+offset[1] > -(50*(board_Scale/10)) && this.pos.y+offset[1] < height+(50*(board_Scale/10))){
+			var clickRad = 10;
+			if(mousePressed && mouseX >= this.pos.x+offset[0]-clickRad*board_Scale/10 && mouseX <= this.pos.x+offset[0]+clickRad*board_Scale/10 && mouseY >= this.pos.y+offset[1]-clickRad*board_Scale/10 && mouseY <= this.pos.y+offset[1]+clickRad*board_Scale/10 && this.roadnum > 2 && edditing === null){
+				//if the center of the tile is clicked
+				if(edditing === null || edditing !== null && mouseX < width*7/8){
+					edditing = this.place;
 				}
 			}
-			rotate(HALF_PI);
-		}
 
-		if(trafficOverlay == true){
-			if(this.cars.length !== 0){
-				fill(255,0,0,constrain(100/this.trafficValue,0,200));
-				rect(0,0,101,101);
+			//translate and scale properly. Can draw between (-50,-50) and (50,50)
+
+			pushMatrix();
+			translate(this.pos.x, this.pos.y);
+			scale(board_Scale/10);
+
+			noStroke();
+			fill(50,255,50);
+			rect(0, 0, 100, 100);
+
+			//if(this.place.x === origin[0] && this.place.y === origin[1]){
+			//	fill(255,0,0);
+			//	rect(0,0,40,40);
+			//}
+			//By Kol Greenbaum
+			//stroke(255,0,0);
+			//line(0,-50,0,50);
+			//line(-50,0,50,0);
+			//noStroke();
+
+			if(this.roadnum <= 2){
+				this.roadnum = 0;
 			}
-		}
+			for(var i = 0; i < this.connections.length; i++){
+				if(this.connections[i] === 1){
+					fill(150);
+					rect(21.5,0,57,14);
+					fill(255,255,0);
+					rect(12, 0, 10, 2);
+					rect(37, 0, 10, 2);
 
-		popMatrix();
-		//fill(255,0,0);
-		//rect(this.pos.x, this.pos.y, 14*board_Scale/10, 14*board_Scale/10);
+					if(this.buildings[i][0] === 1){
+						fill(this.buildings[i][1]);
+						rect(32,-32,30,30);
+					}
+					
+					if(this.roadnum > 2){
+						if(this.intersection === "STOP"){
+							fill(255,0,0);
+							octagon(14, -10, 0.5);
+							if(board_Scale > 20){
+								rotate(-HALF_PI);
+								textSize(1.5);
+								fill(255);
+								text("STOP",8,14.5);
+								rotate(HALF_PI);
+							}else{
+								fill(255);
+								rect(13.75,-10,1,3);
+							}
+						}
+
+						if(this.intersection === "LIGHT"){
+							if(this.Dir === i%2){
+								fill(0, 128, 0);
+							}else{
+								fill(255, 0, 0);
+							}
+							rect(14,-10,4,4);
+						}
+					}else{
+						this.roadnum++;
+					}
+				}
+				rotate(HALF_PI);
+			}
+
+			if(trafficOverlay == true){
+				if(this.cars.length !== 0){
+					fill(255,0,0,constrain(100/this.trafficValue,0,200));
+					rect(0,0,101,101);
+				}
+			}
+
+			popMatrix();
+			//fill(255,0,0);
+			//rect(this.pos.x, this.pos.y, 14*board_Scale/10, 14*board_Scale/10);
+		}
 	}
 };
 
