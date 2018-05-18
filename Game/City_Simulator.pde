@@ -48,6 +48,7 @@ var spots = [];
 var bestScore = 0;
 var carPositions = [];
 var centerPos = new PVector(0,0);
+var BCcolor = [50,200,50];
 /*for(var x = 0; x < round(Size[0]*100/8); x++){
 	carPositions.push([]);
 	//for(var y = 0; y < round(Size[1]*100/))
@@ -379,7 +380,8 @@ piece.prototype.Draw = function() {
 		this.trafficValueHistory.splice(0,1);
 		var temp = 0;
 		for(var i = 0; i < this.cars.length; i++){
-			temp+=cars[this.cars[i]].speed;
+			var that = cars[this.cars[i]];
+			temp+=that.speed/that.maxSpeed*10;
 		}
 		if(this.cars.length === 0){
 			this.trafficValueHistory.push(10);
@@ -408,7 +410,7 @@ piece.prototype.Draw = function() {
 			scale(board_Scale/10);
 
 			noStroke();
-			fill(50,255,50);
+			fill(BCcolor[0],BCcolor[1],BCcolor[2]);
 			rect(0, 0, 100, 100);
 
 			//if(this.place.x === origin[0] && this.place.y === origin[1]){
@@ -426,11 +428,16 @@ piece.prototype.Draw = function() {
 			}
 			for(var i = 0; i < this.connections.length; i++){
 				if(this.connections[i] === 1){
-					fill(150);
-					rect(21.5,0,57,14);
-					fill(255,255,0);
-					rect(12, 0, 10, 2);
-					rect(37, 0, 10, 2);
+					if(trafficOverlay === true){ // draw traffic overlay
+						fill(50*(10-this.trafficValue), 50*(this.trafficValue), 0);
+						rect(21.5,0,57,14);
+					}else{
+						fill(150);
+						rect(21.5,0,57,14);
+						fill(255,255,0);
+						rect(12, 0, 10, 2);
+						rect(37, 0, 10, 2);
+					}
 
 					if(this.buildings[i][0] === 1){
 						fill(this.buildings[i][1]);
@@ -468,12 +475,12 @@ piece.prototype.Draw = function() {
 				rotate(HALF_PI);
 			}
 
-			if(trafficOverlay == true){
+			/*if(trafficOverlay == true){
 				if(this.cars.length !== 0){
 					fill(255,0,0,constrain(100/this.trafficValue,0,200));
 					rect(0,0,101,101);
 				}
-			}
+			}*/
 
 			popMatrix();
 			//fill(255,0,0);
@@ -1010,7 +1017,7 @@ void draw(){
 		//centerPos.x = centerPos.x*(100/board_Scale); centerPos.y = centerPos.y*(100/board_Scale);
 
 		//offset = [0,0];
-		background(50,255,50);
+		background(BCcolor[0],BCcolor[1],BCcolor[2]);
 		//background(0);
 
 		//println(mouseX);
@@ -1103,8 +1110,13 @@ void draw(){
 		//println(averageSpeed/cars.length);
 
 		noStroke();
+
+		if(trafficOverlay === false){
+			for(var i = 0; i < cars.length; i++){
+				cars[i].Draw();
+			}
+		}
 		for(var i = 0; i < cars.length; i++){
-			cars[i].Draw();
 			cars[i].Drive();
 		}
 
@@ -1204,7 +1216,7 @@ void draw(){
 		//line(width/2, -1, width/2, height+1);
 		//line(-1, height/2, width+1, height/2);
 	}else if(screen === "MainMenu"){
-		background(50,255,50);
+		background(BCcolor[0],BCcolor[1],BCcolor[2]);
 		if(true===true){
 			pushMatrix();
 			translate(offset[0], offset[1]);
@@ -1275,7 +1287,7 @@ void draw(){
 			screen = "Instructions";
 		}
 	}else if(screen === "GameSetup"){
-		background(50,255,50);
+		background(BCcolor[0],BCcolor[1],BCcolor[2]);
 		if(true===true){
 			pushMatrix();
 			translate(offset[0], offset[1]);
@@ -1391,7 +1403,7 @@ void draw(){
 		text("Maximum City Size: " + textAffix[1], 200, 190);
 		text("City Limmit Size: " + round(GridSpaceSlider.value*GridSpaceAspectRatio[0]) + " X " + round(GridSpaceSlider.value*GridSpaceAspectRatio[1]), 200, 250);
 	}else if(screen === "Instructions"){
-		background(50,255,50);
+		background(BCcolor[0],BCcolor[1],BCcolor[2]);
 		if(true===true){
 			pushMatrix();
 			translate(offset[0], offset[1]);
@@ -1466,7 +1478,7 @@ void draw(){
 			screen = pscreen;
 		}
 	}else if(screen === "pause"){
-		background(50,255,50);
+		background(BCcolor[0],BCcolor[1],BCcolor[2]);
 		if(true===true){
 			pushMatrix();
 			translate(offset[0], offset[1]);
@@ -1491,8 +1503,10 @@ void draw(){
 			}
 
 			noStroke();
-			for(var i = 0; i < cars.length; i++){
-				cars[i].Draw();
+			if(trafficOverlay === false){
+				for(var i = 0; i < cars.length; i++){
+					cars[i].Draw();
+				}
 			}
 
 			popMatrix();
