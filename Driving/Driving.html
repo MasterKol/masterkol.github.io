@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Learning Cars</title>
+	<script type="text/javascript" src="./Processing.js"></script>
 </head>
 <body>
 	<div style="float:left;"><canvas data-processing-sources="./Driving.pde"></canvas></div>
@@ -14,7 +15,6 @@
 
 		<p>This simulation is meant to roughly mirror the AI learning algorithim known as <a href="http://nn.cs.utexas.edu/downloads/papers/stanley.ec02.pdf">NEAT</a>. This is only a rough copy because of the lack of speciation in my implementation, however the agents are able to solve this task well and optimize their route quickly.<br><br>The Agents in this implementation have two detectors facing 45 degrees from forwards that tell them the distance to the wall in that direction (as a percent of the maximum detectable distance).</p>
 	</div>
-	<script src="./processing.js"></script>
 </body>
 </html>
 <!-- to start a local host server navigate to the proper folder in the terminal and exicute the command "python -m SimpleHTTPServer" -->
