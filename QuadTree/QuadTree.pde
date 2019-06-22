@@ -197,7 +197,7 @@ function Galaxy(x,y,stars,m1,m2,vx,vy,MinDist,MaxDist,velScale,dir) {
 		var D = random(MinDist,MaxDist);
 		var vel = sqrt(G*m1/(D*Distance_Scale))*velScale; //*random(0.9, 1.1)
 		var ang = random(-PI,PI);
-		Points.push(new Point(D*cos(ang)+x, D*sin(ang)+y, vel*cos(ang+(HALF_PI*dir))+vx, vel*sin(ang+(HALF_PI*dir))+vy, m2, 0.25));
+		Points.push(new Point(D*cos(ang)+x, D*sin(ang)+y, vel*cos(ang+(HALF_PI*dir))+vx, vel*sin(ang+(HALF_PI*dir))+vy, m2, 0.75));
 	}
 }
 
