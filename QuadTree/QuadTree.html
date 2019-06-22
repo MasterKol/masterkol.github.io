@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>QuadTree</title>
+	<script src="./processing.min.js"></script>
+</head>
+<body style="margin: 0px;background: #323232;">
+	<canvas data-processing-sources="./QuadTree.pde"></canvas>
+	<div style="padding: 10px;">
+		<h3 style="color: white;">Controls</h3>
+		<ul style="color: white;">
+			<li>Move Screen - Left Click + Drag</li>
+		</ul>
+
+		<p style="color: white; width: 700px;">This simulation uses the Barnes-Hut method to simulate the gravitational forces acting on each object. This method groups bodys together to simplify calculations as the objects get farther away, making use of a Quad Tree in order to store the objects' relative positions. By using this algorithim I was able to move from a simulation with O(n<sup>2</sup>) complexity to one with O(n log n) complexity drastically decreasing computing cost. The next step with this project is to implement the fast multipole method which further simplifies the problem to O(n).<br><a href="https://github.com/MasterKol/masterkol.github.io/tree/master/QuadTree">Code</a></p>
+	</div>
+</body>
+</html>
+<!-- to start a local host server navigate to the proper folder in the terminal and exicute the command "python -m SimpleHTTPServer" -->
