@@ -1116,7 +1116,7 @@ class Net{
 			t = new Track(TN);
 			if(TN == 0){
 				c = new Car(t, new PVector(240,400), -PI/2 - 0.33);
-			}else if(TN == 1){
+			}else if(TN == 1 || TN == 3){
 				c = new Car(t, new PVector(420,520), PI);
 			}else if(TN == 2){
 				c = new Car(t, new PVector(350,520), PI);
