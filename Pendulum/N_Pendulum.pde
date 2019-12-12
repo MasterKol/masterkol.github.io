@@ -40,42 +40,42 @@ void draw(){
   //fill(255,255,255,10);
   //rect(-1,-1,701,701);
   if(!started){
-    background(255);
+    background(0);
     noStroke();
     textSize(12);
     
-    fill(0);
+    fill(255);
     text("Number of Links", 50, 45);
     if(n.currentValue < 30){fill(50,200,50);}else if(n.currentValue < 40){fill(200,200,50);}else{fill(200,50,50);}
     text((int)n.currentValue, 165, 65);
     n.draw();
     
-    fill(0);
+    fill(255);
     text("Spring Constant", 250, 45);
     text((int)sq(k.currentValue), 365, 65);
     k.draw();
     
-    fill(0);
+    fill(255);
     text("Friction Coefficent", 50, 245);
     text(f.currentValue/1000, 165, 265);
     f.draw();
     
-    fill(0);
+    fill(255);
     text("Initial Angle", 250, 245);
     text(thetai.currentValue, 365, 265);
     thetai.draw();
     
-    fill(0);
+    fill(255);
     text("Initial Velocity", 50, 445);
     text(vthetai.currentValue, 165, 465);
     vthetai.draw();
     
-    fill(0);
+    fill(255);
     text("Total Length", 250, 445);
     text((int)len.currentValue, 365, 465);
     len.draw();
     
-    fill(0);
+    fill(255);
     text("Gravitational Constant", 450, 45);
     text(g.currentValue, 565, 65);
     g.draw();
