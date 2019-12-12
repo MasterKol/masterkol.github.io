@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Double Pendulum</title>
+	<title>N-Pendulum</title>
 	<script src="./Processing.js"></script>
 </head>
 <body style="margin: 0px;background: #323232;">
-	<canvas data-processing-sources="./Double_Pendulum.pde"></canvas>
-	<div style="padding: 10px;">
+	<canvas data-processing-sources="./N_Pendulums.pde" style="width: 700px; float: left;"></canvas>
+	<!--<div style="padding: 10px;">
 		<p style="color: white; width: 700px;">This is a simulation of a double pendulum system, the differential equations that describe this system were solved using the lagrangian method. In order to expand this to longer pendulums I constructed general equations for the system and solved them <a href="https://docs.google.com/document/d/1ueXFrod1N4tD9R_az8eydxTfb1a0G9q9Kx3WvmVwV6o/edit?usp=sharing" style="color: lightblue;">here</a>. These equations get solved in python so I currently have no way to upload it to a website, these equations work for the most part however they are unstable and the energy in the system tends towards infinity for longer pendulums. <br> This system is composed of 10 double pendulums offset from eachother by &plusmn;10<sup>-6</sup> radians and quickly diverge because of the chaotic nature of the system.<br><a href="https://github.com/MasterKol/masterkol.github.io/tree/master/Pendulum">Code</a></p>
+	</div>-->
+	<div style="padding: 10px; padding-left: 710px;">
+		<p style="color: white;">This is a simulation of multiple linked pendulums which form a chain or rope (depending on the value of n). These equations are generated from a generalized equation governing their motion. The system generated requires solving a N x N set of equations, the solving time for which is proportional to O(n<sup>3</sup>). This makes solving the system difficult for larger systems approaching 40 to 50 links. Two pendulums that are setup in the same position but slightly offset quickly diverge from one another despite their difference being small, this is the "butterfly effect" in action (properly known as sensitivity to initial conditions). My work can be found 
+
+		<a href="https://docs.google.com/document/d/1ueXFrod1N4tD9R_az8eydxTfb1a0G9q9Kx3WvmVwV6o/edit?usp=sharing" style="color: lightblue;">in this document</a>. <br><br><a href="https://github.com/MasterKol/masterkol.github.io/tree/master/Pendulum" style="color: lightblue;">Code</a></p>
 	</div>
+
 </body>
 </html>
 <!-- to start a local host server navigate to the proper folder in the terminal and exicute the command "python -m SimpleHTTPServer" -->
