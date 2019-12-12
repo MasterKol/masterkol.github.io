@@ -3,8 +3,20 @@
 <head>
 	<title>N-Pendulum</title>
 	<script src="./Processing.js"></script>
+	<link rel="stylesheet" type="text/css" href="./N_Pendulum.css">
+	<link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet">
 </head>
 <body style="margin: 0px;background: #323232;">
+	<div class="topnav">
+		<a href="../Home/Home.html">Home</a>
+		<a href="../Game/Game.html">Game</a>
+		<a href="../Description/Description.html">The Problem</a>
+		<a href="../About/About.html">Refrences</a>
+		<a style="background-color: #634a23;" href="../Driving/Driving.html">Self-Driving Cars</a>
+		<a class="active" style="background-color: #634a23;" href="../Pendulum/N_Pendulum.html">N-Pendulums</a>
+		<a style="background-color: #634a23;" href="../QuadTree/QuadTree.html">Gravitational Simulation</a>
+	</div>
+
 	<canvas data-processing-sources="./N_Pendulums.pde" style="width: 700px; float: left;"></canvas>
 	<!--<div style="padding: 10px;">
 		<p style="color: white; width: 700px;">This is a simulation of a double pendulum system, the differential equations that describe this system were solved using the lagrangian method. In order to expand this to longer pendulums I constructed general equations for the system and solved them <a href="https://docs.google.com/document/d/1ueXFrod1N4tD9R_az8eydxTfb1a0G9q9Kx3WvmVwV6o/edit?usp=sharing" style="color: lightblue;">here</a>. These equations get solved in python so I currently have no way to upload it to a website, these equations work for the most part however they are unstable and the energy in the system tends towards infinity for longer pendulums. <br> This system is composed of 10 double pendulums offset from eachother by &plusmn;10<sup>-6</sup> radians and quickly diverge because of the chaotic nature of the system.<br><a href="https://github.com/MasterKol/masterkol.github.io/tree/master/Pendulum">Code</a></p>
