@@ -246,14 +246,14 @@ class Pendulum{
       for(k = 0; k < n; k++){
         if(w == k){Matrix[w][k] = mass*(n - w); continue;}
         m = mass*(n - max(w,k));
-        da = (angs[k] - angs[w] + TAU)%TAU - PI;
-        cda = polyCos(angs[k] - angs[w]);
+        da = (Angs[k] - Angs[w] + TAU)%TAU - PI;
+        cda = polyCos(Angs[k] - Angs[w]);
         Matrix[w][k] = cda*m;
         Matrix[w][n] += -vels[k]*vels[k]*m*sqrt(1-cda*cda)*sign(da);
       }
-      Matrix[w][n] -= mass*(n-w)*g*sin(angs[w]);
-      Matrix[w][n] += 2 * Springk * d;//((w == 0) ? 0 : (n-w)*(angs[w-1] - angs[w]));
-      d = mass*(n-w)*(angs[w] - angs[min(w+1, n-1)]);//sqrt(sq(cos(angs[w]) - cos(angs[min(w+1, n-1)])) - sq(sin(angs[w]) - sin(angs[min(w+1, n-1)])));
+      Matrix[w][n] -= mass*(n-w)*g*sin(Angs[w]);
+      Matrix[w][n] += 2 * Springk * d;//((w == 0) ? 0 : (n-w)*(Angs[w-1] - Angs[w]));
+      d = mass*(n-w)*(Angs[w] - Angs[min(w+1, n-1)]);//sqrt(sq(cos(Angs[w]) - cos(Angs[min(w+1, n-1)])) - sq(sin(Angs[w]) - sin(Angs[min(w+1, n-1)])));
       Matrix[w][n] -= 2 * Springk * d;
     }
     
