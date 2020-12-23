@@ -25,7 +25,7 @@ boolean started = false;
 boolean pmousePressed = false;
 float TAU = 2*PI;
 
-Slider n = new Slider(new PVector(50,50), new PVector(100, 20), 1, 50, 20);
+Slider n = new Slider(new PVector(50,50), new PVector(100, 20), 1, 120, 20);
 Slider k = new Slider(new PVector(250,50), new PVector(100, 20), 0, 50, 6, false);
 Slider f = new Slider(new PVector(50,250), new PVector(100, 20), 0, 100, 10, false);
 Slider thetai = new Slider(new PVector(250,250), new PVector(100, 20), -180, 180, -70, false);
@@ -34,6 +34,7 @@ Slider len = new Slider(new PVector(250,450), new PVector(100, 20), 50, 400, 300
 Slider g = new Slider(new PVector(450,50), new PVector(100, 20), -30, 30, 9.81, false);
 
 void draw(){
+  dt = (float)1/ frameRate / 30;
   //println(frameRate);
   //if(time == 0){Pen.Angs[Pen.Angs.length-1] = PI-0.01;}
   background(0);
@@ -47,7 +48,7 @@ void draw(){
     
     fill(255);
     text("Number of Links", 50, 45);
-    if(n.currentValue < 30){fill(50,200,50);}else if(n.currentValue < 40){fill(200,200,50);}else{fill(200,50,50);}
+    if(n.currentValue < 70){fill(50,200,50);}else if(n.currentValue < 90){fill(200,200,50);}else{fill(200,50,50);}
     text((int)n.currentValue, 165, 65);
     n.draw();
     
