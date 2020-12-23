@@ -89,7 +89,7 @@ void draw(){
     
     textSize(12);
     if(pmousePressed && !mousePressed && mouseX >= 150 && mouseX <= 250 && mouseY >= 550 && mouseY <= 580){
-      Pen = new Pendulum((int)n.currentValue, new PVector(350, 350), -thetai.currentValue/180*PI, vthetai.currentValue, 1000, (int)len.currentValue);
+      Pen = new Pendulum((int)n.currentValue, new PVector(350, 350), -thetai.currentValue/180*PI, vthetai.currentValue, 1, (int)len.currentValue);
       Pen.g = g.currentValue;
       Pen.Springk = sq(k.currentValue);
       Pen.friction = f.currentValue/1000;
