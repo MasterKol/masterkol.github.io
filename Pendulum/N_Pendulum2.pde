@@ -4,7 +4,7 @@ float AcceptableError = 0.0001;
 Pendulum Pen;// = new Pendulum(80, new PVector(350, 350), PI/2, 0, 1000, 300)
 //Pendulum Pen2 = new Pendulum(26, new PVector(350, 350), PI/2, 0, 100, 300);
 
-float FR = 100;
+float FR = 60;
 
 void setup(){
   background(0);
