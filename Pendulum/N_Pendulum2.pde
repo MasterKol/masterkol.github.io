@@ -129,6 +129,12 @@ float[][] MatrixRemove(float[][] A, float i, float j){
   return An;
 }
 
+float sign(float v){
+  if(v == 0){return 0;}
+  else if(v > 0){return 1;}
+  return -1;
+}
+
 float polyCos(float v){
   //v = (v+TAU)%TAU;
   if(v >= PI){v -= TAU;}
