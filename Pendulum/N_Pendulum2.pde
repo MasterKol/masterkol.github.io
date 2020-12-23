@@ -258,7 +258,7 @@ class Pendulum{
         da = (Angs[k] - Angs[w] + TAU)%TAU - PI;
         cda = polyCos(Angs[k] - Angs[w]);
         Matrix[w][k] = cda*m;
-        Matrix[w][n] += -vels[k]*vels[k]*m*sqrt(1-cda*cda)*sign(da);
+        Matrix[w][n] += -Vels[k]*Vels[k]*m*sqrt(1-cda*cda)*sign(da);
       }
       Matrix[w][n] -= mass*(n-w)*g*sin(Angs[w]);
       Matrix[w][n] += 2 * Springk * d;//((w == 0) ? 0 : (n-w)*(Angs[w-1] - Angs[w]));
@@ -290,12 +290,6 @@ class Pendulum{
         Matrix[i][n] -= acc[j]*Matrix[i][j];
       }
       acc[i] = Matrix[i][n]/Matrix[i][i];
-    }
-    
-    //println(acc);
-    
-    for(i = 0; i < n; i++){
-      vels[i] += acc[i]*dt;
     }
     
     for(int i = 0; i < n; i++){
