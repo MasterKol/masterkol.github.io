@@ -252,7 +252,6 @@ class Pendulum{
   
   void Step(float dt){
     float[][] Matrix = new float[n][n+1];
-    int t = millis();
     int k;
     float m, da;
     float d = 0;
@@ -272,8 +271,6 @@ class Pendulum{
       Matrix[w][n] -= 2 * Springk * d;
     }
     
-    Gen += millis()-t;
-    t = millis();
     //for(int i = 0; i < n; i++){for(int j = 0; j < n+1; j++){print(Matrix[i][j]," ");}println();}
     //println("----------");
     float ratio;
@@ -287,7 +284,6 @@ class Pendulum{
         Matrix[r][c] = 0;
       }
     }
-    Tri += millis()-t;
     //for(int i = 0; i < n; i++){for(int j = 0; j < n+1; j++){print(Matrix[i][j]," ");}println();}
     
     float[] acc = new float[n];
