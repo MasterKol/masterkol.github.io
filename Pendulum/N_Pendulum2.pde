@@ -201,7 +201,10 @@ class Pendulum{
   float[] pAccs;
   boolean simplify = false;
   float friction = 0.01;
-  Pendulum(int nt, PVector Centert, float angle, float da, float mass, float L){
+  float mass, L;
+  Pendulum(int nt, PVector Centert, float angle, float da, float _mass, float _L){
+    mass = _mass;
+    L = _L;
     n = nt;
     Center = Centert;
     float[] tAngs = new float[n], tVels = new float[n], tMasses = new float[n], tLengths = new float[n], MPS = new float[n], tpAccs = new float[n];
