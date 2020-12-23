@@ -23,6 +23,7 @@ boolean InitialPrint = false;
 boolean started = false;
 
 boolean pmousePressed = false;
+float TAU = 2*PI;
 
 Slider n = new Slider(new PVector(50,50), new PVector(100, 20), 1, 50, 20);
 Slider k = new Slider(new PVector(250,50), new PVector(100, 20), 0, 50, 6, false);
