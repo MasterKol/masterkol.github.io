@@ -129,6 +129,14 @@ float[][] MatrixRemove(float[][] A, float i, float j){
   return An;
 }
 
+float polyCos(float v){
+  //v = (v+TAU)%TAU;
+  if(v >= PI){v -= TAU;}
+  else if(v <= -PI){v += TAU;}
+  float vs = v*v;
+  return 1 - vs/2 + vs*vs/24 - vs*vs*vs/720 + vs*vs*vs*vs/40320;
+}
+
 class Slider{
   PVector pos, dims;
   float currentValue;
