@@ -86,17 +86,18 @@ var App = /** @class */ (function () {
             }
 
             var lengths = [];
-            var samples = 1024;
             var totalLength = 0;
             for (var i in chains) {
                 lengths.push(chains[i].pathLength);
-
-                totalLength = totalLength + chains[i].pathLength;
+                totalLength = totalLength + lengths[i];
             }
+            var minLength = 2;
+            var samples = Math.pow(2, Math.ceil(Math.log(totalLength/minLength)/Math.log(2)));
+            console.log(samples);
 
             var points = [];
             for (var i in chains) {
-                var fraction = Math.floor(lengths[i] / totalLength * samples);//math.floor(p.length() / totalLength * samples)
+                var fraction = lengths[i] / totalLength * samples;//math.floor(p.length() / totalLength * samples)
                 if (i == chains.length-1) {
                     fraction += samples - (fraction + points.length);
                 }
