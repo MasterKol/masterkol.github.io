@@ -219,8 +219,8 @@ void update(){
 		}
 	}
 
-	PVector Min = new PVector(points[0][0], points[0][1]);
-	PVector Max = new PVector(points[0][0], points[0][1]);
+	PVector Min = new PVector(points[0][0], points[0][1]*-1);
+	PVector Max = new PVector(points[0][0], points[0][1]*-1);
 
 	for(int i = 0; i < points.length; i++){
 		points[i][1] *= -1;
@@ -232,13 +232,19 @@ void update(){
 
 	PVector size = new PVector(Max.x - Min.x, Max.y - Min.y);
 	float imageScale = min(width/size.x*0.9, height/size.y*0.8);
+	//println(width/size.x*0.9 + ", " + height/size.y*0.8);
+	//println(Min);
+	//println(Max);
+	//println(size);
 
+	//println(points[0][0] + ", " + (-Min.x - size.x/2));
 	for(int i = 0; i < points.length; i++){
 		points[i][0] += -Min.x - size.x/2;
 		points[i][1] += -Min.y - size.y/2;
 		points[i][0] *= imageScale;
 		points[i][1] *= imageScale;
 	}
+	//println(points[0][0]);
 
 	FourierValues = fft(points);
 
@@ -309,7 +315,7 @@ Clicked = function() {
 }
 
 Update = function() {
-	updateTimer = 1;
+	updateTimer = 3;
 }
 
 /*document.getElementById("input-text").onkeyup = function() {
