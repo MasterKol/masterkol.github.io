@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!-- python3 -m http.server --cgi 8080 -->
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+
+		<title>Test Site</title>
+		<meta name="description" content="google-font-to-svg-path">
+
+		<link rel="stylesheet" type="text/css" href="index.css" />
+
+		<script src="https://maker.js.org/target/js/browser.maker.js" type="text/javascript"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bezier-js@2/bezier.js"></script>
+		<script src="opentype.js" type="text/javascript"></script>
+		<script src="index.js" type="text/javascript"></script>
+		<script type="text/javascript" src="./Processing.js"></script>
+	</head>
+
+	<body style="background-color: #202020">
+
+		<canvas data-processing-sources="./Main.pde" tabindex="0" id="__processing0" width="1000" height="500"></canvas>
+
+		<br>
+		<div id="buttons">
+			<label style="color: white">Font: <select id="font-select" onchange="fontChanged();"></select></label>
+
+			<label style="color: white">Variant: <select id="font-variant" onchange="Changed();"></select></label>
+
+			<label style="color: white">Text: <input type="text" id="input-text" value="Hello" onkeyup="Changed();" /></label>
+
+			<label style="color: white">Speed: <input type="number" id="input-speed" value="2" max="20" min="0" style="width: 40px" /></label>
+
+			<button type="button" id="run-button" onclick="testFunction();">Update</button>
+		</div>
+
+		<div id="svg-render" style="display: none"></div>
+
+		<textarea id="output-svg" style="display: none"></textarea>
+
+		<script type="text/javascript" id="functions">
+			function testFunction() {
+				Clicked();
+			}
+
+			function noderender(){}
+			function nodeloadvariants(){}
+
+			function Changed(){
+				noderender();
+				Update();
+			}
+
+			function fontChanged(){
+				nodeloadvariants();
+				Update();
+			}
+		</script>
+
+	</body>
+</html>
