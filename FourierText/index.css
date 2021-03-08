@@ -1,0 +1,38 @@
+body, div, input, select, button {
+    font-family: sans-serif;
+}
+
+body {
+    padding: 0 20px;
+}
+
+canvas {
+	padding: 0;
+    margin: auto;
+    display: block;
+    width: 1000px;
+}
+
+#buttons {
+	margin: auto;
+	width: 100%;
+}
+
+hr {
+    margin: 20px 0;
+}
+
+label {
+    margin-right: 3ex;
+    white-space: nowrap;
+}
+
+svg {
+    margin: 20px;
+    overflow: visible;
+}
+
+textarea {
+    height: 300px;
+    width: 100%;
+}
