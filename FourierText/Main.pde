@@ -7,7 +7,10 @@ float imageScale = 1;
 int minSamples = (int)pow(2, 12);
 
 void setup(){
-	size(1200,500);
+	//var ctx = document.getElementById("__processing0");
+	size(window.innerWidth, 500);
+	//ctx.canvas.width = window.innerWidth;
+	
 	background(32);
 	frameRate(20);
 

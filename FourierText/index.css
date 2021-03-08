@@ -10,12 +10,14 @@ canvas {
 	padding: 0;
     margin: auto;
     display: block;
-    width: 1000px;
+    width: 100%;
+    outline: none;
 }
 
 #buttons {
 	margin: auto;
 	width: 100%;
+    text-align: center
 }
 
 hr {
