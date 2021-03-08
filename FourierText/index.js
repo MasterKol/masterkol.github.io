@@ -8,7 +8,6 @@ var App = /** @class */ (function () {
             _this.render(_this.selectFamily.selectedIndex, _this.selectVariant.selectedIndex, _this.textInput.value, 100, false, true, false, 2);
         };
         this.loadVariants = function () {
-            console.log("x");
             _this.selectVariant.options.length = 0;
             var f = _this.fontList.items[_this.selectFamily.selectedIndex];
             var v = f.variants.forEach(function (v) { return _this.addOption(_this.selectVariant, v); });
@@ -103,7 +102,7 @@ var App = /** @class */ (function () {
                 }
                 points = points.concat(makerjs.chain.toPoints(chains[i], lengths[i]/fraction));
             }
-            console.log(points.length);
+            //console.log(points.length);
             var svg = makerjs.exporter.toSVG(textModel);
             //_this.renderDiv.innerHTML = svg;
             //_this.outputTextarea.value = svg;
