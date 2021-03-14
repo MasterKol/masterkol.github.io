@@ -1,10 +1,16 @@
 ///<reference path="node_modules/makerjs/index.d.ts" />
 var makerjs = require('makerjs');
+var firstRender = true;
 //const fs = require('fs');
 var App = /** @class */ (function () {
     function App() {
         var _this = this;
         this.renderCurrent = function () {
+            if (firstRender) {
+                _this.selectFamily.value = "lobster";
+                _this.selectFamily.selectedIndex = 557;
+                firstRender = false;
+            }
             _this.render(_this.selectFamily.selectedIndex, _this.selectVariant.selectedIndex, _this.textInput.value, 100, false, true, false, 2);
         };
         this.loadVariants = function () {
@@ -119,4 +125,5 @@ var app = new App();
 window.onload = function () {
     app.init();
     app.getGoogleFonts('AIzaSyAOES8EmKhuJEnsn9kS1XKBpxxp-TgN8Jc');
+    //value="lobster" selectedIndex="557"
 };
