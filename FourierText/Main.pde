@@ -1,4 +1,3 @@
-//PShape test;
 float[][] points = {};
 float[][] FourierValues = {};
 
@@ -7,9 +6,7 @@ float imageScale = 1;
 int minSamples = (int)pow(2, 12);
 
 void setup(){
-	//var ctx = document.getElementById("__processing0");
 	size(window.innerWidth, 500);
-	//ctx.canvas.width = window.innerWidth;
 	
 	background(32);
 	frameRate(20);
@@ -19,11 +16,15 @@ void setup(){
 
 float t = 0;
 float dt = 0.0001;
+var resolutionSelector = document.getElementById("input-resolution");
+var StepSelector = document.getElementById("input-step");
+vaar colorSelector = document.getElementById("input-color");
 int stepsPerFrame = document.getElementById("input-speed").value;
 float[][] dPoints;// = new float[ceil(1/dt)+1][2];
 PVector center;
 float Scale = 1;
 int Res = -1;
+color Linecolor = color(255, 0, 0);
 
 float[] ei(float x){
 	float[] out = {cos(x), sin(x)};
@@ -184,12 +185,14 @@ void drawPoints(float t){
 		point(dPoints[i][0]*Scale, dPoints[i][1]*Scale);
 	}*/
 
-	stroke(255, 0, 0);
+	stroke(Linecolor);
 	for(int i = 0; i < dPoints.length; i++){
 		int j = (i+1)%dPoints.length;
 		if(dPoints[j] == null){break;}
-		if(DistSq(dPoints[i][0] - dPoints[j][0], dPoints[i][1] - dPoints[j][1]) < 100){
+		if(DistSq(dPoints[i][0] - dPoints[j][0], dPoints[i][1] - dPoints[j][1]) < 400){
 			line(dPoints[i][0]*Scale, dPoints[i][1]*Scale, dPoints[j][0]*Scale, dPoints[j][1]*Scale);
+		}else{
+			point(dPoints[i][0]*Scale, dPoints[i][1]*Scale);
 		}
 	}
 }
@@ -252,9 +255,13 @@ void update(){
 	FourierValues = fft(points);
 
 	t = 0;
-	dt = 1/(float)points.length;
+	//dt = 1/(float)points.length;
+	dt = StepSelector.value / (float)points.length;
 	float[][] dPnts = new float[round(1/dt)][2];
 	dPoints = dPnts;
+
+	resolutionSelector.max = (int)(points.length / 2);
+	resolutionSelector.value = resolutionSelector.max;
 }
 
 int updateTimer = 10;
@@ -262,14 +269,9 @@ void draw(){
 	background(32);
 	updateTimer--;
 	if(updateTimer == 0){update();}
-	//stroke(255);
-	//fill(255);
-	//center = new PVector(width/2-dPoints[max(round(t%1/dt)-1, 0)][0]*Scale, height/2-dPoints[max(round(t%1/dt)-1, 0)][1]*Scale);
-	//println(dPoints[max(round(t/dt)-1, 0)]);
+
 	translate(center.x, center.y);
-	//scale(imageScale);
-	//shape(test, imageOffset.x, imageOffset.y);
-	//scale(1/imageScale);
+
 	if(points.length > 0){
 		stroke(0);
 		strokeWeight(1);
@@ -280,33 +282,34 @@ void draw(){
 			addPoint(FourierValues, t);
 			t+=dt;
 		}
-
-		
-		/*int tv = round((t%1)/dt);
-		for(int i = 0; i < points.length; i++){
-			strokeWeight(1.1 - ((i < tv) ? tv - i : points.length - i + tv)/points.length);
-			int j = (i+1)%points.length;
-			stroke(255, 255, 0);//, 350 - ((i < tv) ? tv - i : dPoints.length - i + tv)*255/dPoints.length);
-			if (sq(points[i][0] - points[j][0]) + sq(points[i][1] - points[j][1]) <= 10*10){
-				line(points[i][0], points[i][1], points[j][0], points[j][1]);
-			}
-		}*/
 	}
 	resetMatrix();
-}
 
-/*document.getElementById("run-button").onclick = function() {
-	//println(document.Points);
-	//println(document.testValue);
-	//println(document.getElementById("functions").testFunction);
-	//println(testFunction);
-	//println(document.getElementById("input-text").onchange);
-	update();
-};*/
+	//String c = colorSelector.value.substring(1);
+	Linecolor = unhex("ff" + colorSelector.value.substring(1));
+	document.getElementById("color-label").style.backgroundColor = colorSelector.value;
+	document.getElementById("color-label").style.color = colorSelector.value;
+}
 
 document.getElementById("input-speed").onchange = function() {
 	stepsPerFrame = document.getElementById("input-speed").value;
-};
+}
+
+resolutionSelector.onchange = function() {
+	resolutionSelector.value = max(min((int)resolutionSelector.max, (int)resolutionSelector.value), (int)resolutionSelector.min);
+	Res = resolutionSelector.value;
+	t = 0;
+	float[][] dPnts = new float[round(1/dt)][2];
+	dPoints = dPnts;
+}
+
+StepSelector.onchange = function(){
+	StepSelector.value = max(min((float)StepSelector.max, (float)StepSelector.value), (float)StepSelector.min);
+	dt = StepSelector.value / (float)points.length;
+	t = 0;
+	float[][] dPnts = new float[round(1/dt)][2];
+	dPoints = dPnts;
+}
 
 /*document.getElementById("functions").Clicked = function() {
 	println("x");

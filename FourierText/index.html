@@ -5,7 +5,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Test Site</title>
+		<title>Fourier Text</title>
 		<meta name="description" content="google-font-to-svg-path">
 
 		<link rel="stylesheet" type="text/css" href="index.css" />
@@ -27,16 +27,24 @@
 
 			<label style="color: white">Variant: <select id="font-variant" onchange="Changed();"></select></label>
 
-			<label style="color: white">Text: <input type="text" id="input-text" value="Welcome" onkeyup="Changed();" /></label>
+			<label style="color: white">Text: <input type="text" id="input-text" value="Welcome" onkeyup="Changed();"/></label>
 
-			<label style="color: white">Speed: <input type="number" id="input-speed" value="4" max="20" min="0" style="width: 40px" /></label>
+			<label style="color: white">Speed: <input type="number" id="input-speed" value="4" max="20" min="0" style="width: 40px"/></label>
+
+			<label style="color: white">Resolution: <input type="number" id="input-resolution" value="0" max="0" min="0" style="width: 60px"/></label>
+
+			<label style="color: white">Step Size: <input type="number" id="input-step" value="1" max="2" min="0.1" style="width: 40px" step=".1"/></label>
+
+			<label style="color: white">Line Color: <b id="color-label">aa</b><input type="color" id="input-color" value="#ff0000" style="display: none;" /></label>
 		</div>
-
-		<div id="svg-render" style="display: none"></div>
 
 		<textarea id="output-svg" style="display: none"></textarea>
 
 		<script type="text/javascript" id="functions">
+			//document.getElementById("input-color").onchange = function color(){
+			
+			//}
+
 			function noderender(){}
 			function nodeloadvariants(){}
 
