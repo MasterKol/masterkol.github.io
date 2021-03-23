@@ -5,18 +5,10 @@
 	<script src="./Processing.js"></script>
 	<link rel="stylesheet" type="text/css" href="./BH.css">
 	<link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../SelectionBar.css"/>
 </head>
 <body style="margin: 0px;background: #323232;">
-	<div class="topnav">
-		<a href="../Home/Home.html">Home</a>
-		<a href="../Game/Game.html">Game</a>
-		<a href="../Description/Description.html">The Problem</a>
-		<a href="../About/About.html">Refrences</a>
-		<a style="background-color: #634a23;" href="../Driving/Driving.html">Self-Driving Cars</a>
-		<a style="background-color: #634a23;" href="../Pendulum/N_Pendulum.html">N-Pendulums</a>
-		<a style="background-color: #634a23;" href="../QuadTree/QuadTree.html">Gravitational Simulation</a>
-		<a class="active" style="background-color: #634a23;" href="../BlackHoleRayTracing/BH.html">Black Holes</a>
-	</div>
+	<iframe src="../SelectionBar.html" style="display: none;" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 
 	<div>
 		<div style="float: right; width:350px">
@@ -27,7 +19,7 @@
 			<p style="color: #AAA; font-size: 13px">Animation zooming in on the event horizon</p>
 		</div>
 		<div style="width:700px">
-			<p style="color: white;">In this project I setup a virtual camera in a scene and used raytracing to see how the created image will look. In typical each pixel has a assosiated point that travels out through the cameras apature and follows a straight line path (with reflections and diffusions being implemented in more advanced programs), once the ray hits an object it returns the color of that object at the point of contact and the original pixel is colored with the returned color. With Black Hole Ray Tracing the system is similar, however, at each timestep the ray's velocity changes because of the Black Hole at the origin. Additionally, because of General Relativity, Black Holes don't simply pull on things like a planetary body, time 'runs slower' near a Black Hole relative to a distant observer. This causes light particles to trace out strange orbits creating the view seen in the animation.</p>
+			<p style="color: white; margin-left: 20px;">In this project I setup a virtual camera in a scene and used raytracing to see how the created image will look. In typical each pixel has a assosiated point that travels out through the cameras apature and follows a straight line path (with reflections and diffusions being implemented in more advanced programs), once the ray hits an object it returns the color of that object at the point of contact and the original pixel is colored with the returned color. With Black Hole Ray Tracing the system is similar, however, at each timestep the ray's velocity changes because of the Black Hole at the origin. Additionally, because of General Relativity, Black Holes don't simply pull on things like a planetary body, time 'runs slower' near a Black Hole relative to a distant observer. This causes light particles to trace out strange orbits creating the view seen in the animation.</p>
 		</div>
 		
 	</div>

@@ -3,21 +3,13 @@
 <head>
 	<title>Game</title>
 	<link rel="stylesheet" type="text/css" href="./Game.css">
+	<link rel="stylesheet" type="text/css" href="../SelectionBar.css"/>
 </head>
-<body>
-	<div class="topnav">
-		<a href="../Home/Home.html">Home</a>
-		<a class="active" href="../Game/Game.html">Game</a>
-		<a href="../Description/Description.html">The Problem</a>
-		<a href="../About/About.html">Refrences</a>
-		<a style="background-color: #634a23;" href="../Driving/Driving.html">Self-Driving Cars</a>
-		<a style="background-color: #634a23;" href="../Pendulum/N_Pendulum.html">N-Pendulums</a>
-		<a style="background-color: #634a23;" href="../QuadTree/QuadTree.html">Gravitational Simulation</a>
-		<a style="background-color: #634a23;" href="../BlackHoleRayTracing/BH.html">Black Holes</a>
-	</div>
+<body id="body">
+	<iframe src="../SelectionBar.html" style="display: none;" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 	
-	<div class="gameContainer">
-		<canvas data-processing-sources="./City_Simulator.pde">Your Browser Does not support the canvas element in html</canvas>
+	<div class="gameContainer" id="gameContainer">
+		<canvas data-processing-sources="./City_Simulator.pde" style="outline: none;">Your Browser Does not support the canvas element in html</canvas>
 	</div>
 	<script src="./processing.min.js"></script>
 </body>

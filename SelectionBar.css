@@ -1,0 +1,73 @@
+.dropdown {
+    float: left;
+    position: relative;
+    display: block;
+}
+
+.dropdownbutton {
+    display: block;
+    background-color: #222;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+}
+
+.dropdown-content a {
+    display: block;
+    background-color: #222;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.flex-container {
+    display: flex;
+    flex-flow: row wrap;
+
+    justify-content: flex-start;
+
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.flex-item a{
+    display: block;
+    background-color: #222;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.flex-item a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.flex-item a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.selectionBarContainer {
+    width: 100%;
+    background-color: #222;
+}

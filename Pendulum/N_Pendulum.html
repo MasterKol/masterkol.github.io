@@ -5,19 +5,12 @@
 	<script src="./Processing.js"></script>
 	<link rel="stylesheet" type="text/css" href="./N_Pendulum.css">
 	<link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../SelectionBar.css"/>
 </head>
 <body style="margin: 0px;background: #323232;">
-	<div class="topnav">
-		<a href="../Home/Home.html">Home</a>
-		<a href="../Game/Game.html">Game</a>
-		<a href="../Description/Description.html">The Problem</a>
-		<a href="../About/About.html">Refrences</a>
-		<a style="background-color: #634a23;" href="../Driving/Driving.html">Self-Driving Cars</a>
-		<a class="active" style="background-color: #634a23;" href="../Pendulum/N_Pendulum.html">N-Pendulums</a>
-		<a style="background-color: #634a23;" href="../QuadTree/QuadTree.html">Gravitational Simulation</a>
-		<a style="background-color: #634a23;" href="../BlackHoleRayTracing/BH.html">Black Holes</a>
-	</div>
+	<iframe src="../SelectionBar.html" style="display: none;" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 
+	<br>
 	<div>
 		<canvas data-processing-sources="./N_Pendulum2.pde" style="width: 700px; float: left;"></canvas>
 		<!--<div style="padding: 10px;">

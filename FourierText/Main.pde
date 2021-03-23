@@ -8,7 +8,7 @@ int minSamples = (int)pow(2, 12);
 void setup(){
 	size(window.innerWidth, 500);
 	
-	background(32);
+	background(50);
 	frameRate(20);
 
 	center = new PVector(width/2, height/2);
@@ -198,32 +198,12 @@ void drawPoints(float t){
 }
 
 void update(){
-	if(document.getElementById("input-text").value == ""){return;}
+	if(SamplePoints.length == 0){return;}
 	updateTimer = -1;
-	Text = document.getElementById("output-svg").value;
-	float[][] r = {};
-	points = r;
-	int p = 0;
-	String num = "";
-	float[] val = new float[2];
-	for(int s = 0; s <= Text.length; s++){
-		char ch = Text.charAt(s);
-		if(ch == "," || s == Text.length){
-			if(p == 0){
-				val[0] = float(num);
-				p++;
-			}else{
-				val[1] = float(num);
-				p = 0;
-				points = (float[][])append(points, val);
-				val = new float[2];
-				//println(points.length + " " + points);
-			}
-			num = "";
-		}else{
-			num += ch;
-		}
-	}
+	float[][] Ps = new float[SamplePoints.length][2];
+	//points = SamplePoints;
+	arrayCopy(SamplePoints, Ps);
+	points = Ps;
 
 	PVector Min = new PVector(points[0][0], points[0][1]*-1);
 	PVector Max = new PVector(points[0][0], points[0][1]*-1);
@@ -238,19 +218,13 @@ void update(){
 
 	PVector size = new PVector(Max.x - Min.x, Max.y - Min.y);
 	float imageScale = min(width/size.x*0.9, height/size.y*0.8);
-	//println(width/size.x*0.9 + ", " + height/size.y*0.8);
-	//println(Min);
-	//println(Max);
-	//println(size);
 
-	//println(points[0][0] + ", " + (-Min.x - size.x/2));
 	for(int i = 0; i < points.length; i++){
 		points[i][0] += -Min.x - size.x/2;
 		points[i][1] += -Min.y - size.y/2;
 		points[i][0] *= imageScale;
 		points[i][1] *= imageScale;
 	}
-	//println(points[0][0]);
 
 	FourierValues = fft(points);
 
@@ -266,7 +240,7 @@ void update(){
 
 int updateTimer = 10;
 void draw(){
-	background(32);
+	background(50);
 	updateTimer--;
 	if(updateTimer == 0){update();}
 

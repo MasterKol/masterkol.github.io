@@ -7,8 +7,14 @@ var App = /** @class */ (function () {
         var _this = this;
         this.renderCurrent = function () {
             if (firstRender) {
-                _this.selectFamily.value = "lobster";
-                _this.selectFamily.selectedIndex = 557;
+                _this.selectFamily.selectedIndex = 0;
+                for (var i = 0; i < _this.selectFamily.options.length; i++) {
+                    if(_this.selectFamily.options[i].value == "Lobster"){
+                        _this.selectFamily.selectedIndex = i;
+                        break;
+                    }
+                }
+                //console.log(_this.selectFamily.value);
                 firstRender = false;
             }
             _this.render(_this.selectFamily.selectedIndex, _this.selectVariant.selectedIndex, _this.textInput.value, 100, false, true, false, 2);
@@ -32,6 +38,7 @@ var App = /** @class */ (function () {
         //this.renderDiv = this.$('#svg-render');
         this.outputTextarea = this.$('#output-svg');
         this.functions = this.$('#functions');
+        this.canvas = document.getElementById("__processing0");
     };
     App.prototype.handleEvents = function () {
         nodeloadvariants = this.loadVariants; // this.selectFamily.onchange
@@ -48,7 +55,6 @@ var App = /** @class */ (function () {
         //    this.textInput.onkeyup =
         //        this.renderCurrent;
         noderender = this.renderCurrent;
-        this.testValue = 10;
     };
     App.prototype.$ = function (selector) {
         return document.querySelector(selector);
@@ -90,33 +96,42 @@ var App = /** @class */ (function () {
                 
                 chains = chains.concat(makerjs.model.findChains(textModel.models[i]));
             }
-
             var lengths = [];
             var totalLength = 0;
             for (var i in chains) {
                 lengths.push(chains[i].pathLength);
                 totalLength = totalLength + lengths[i];
             }
-            var minLength = 2;
-            var samples = Math.pow(2, Math.ceil(Math.log(totalLength/minLength)/Math.log(2)));
-            console.log(samples);
+            var samples = 0;
+            if(text != ""){
+                var modelSize = makerjs.measure.modelExtents(textModel);
+                var scale = Math.min(_this.canvas.width/modelSize.width*0.9, _this.canvas.width/modelSize.height*0.8);
+                var minLength = 4 / scale;
+                var samples = Math.pow(2, Math.ceil(Math.log(totalLength / minLength) / Math.log(2)));
+            }
 
             var points = [];
             for (var i in chains) {
-                var fraction = lengths[i] / totalLength * samples;//math.floor(p.length() / totalLength * samples)
+                var fraction = Math.round(lengths[i] / totalLength * samples);//math.floor(p.length() / totalLength * samples)
                 if (i == chains.length-1) {
                     fraction += samples - (fraction + points.length);
                 }
-                points = points.concat(makerjs.chain.toPoints(chains[i], lengths[i]/fraction));
+                var p2a = makerjs.chain.toPoints(chains[i], lengths[i]/fraction);
+                //console.log(points.length);
+                //console.log(p2a.length);
+                points = points.concat(p2a);
             }
             //console.log(points.length);
-            var svg = makerjs.exporter.toSVG(textModel);
+            //var svg = makerjs.exporter.toSVG(textModel);
             //_this.renderDiv.innerHTML = svg;
             //_this.outputTextarea.value = svg;
 
+            /*for (var i in points) {
+                points[i][0] = Math.round(points[i][0]*100)/100;
+                points[i][1] = Math.round(points[i][1]*100)/100;
+            }*/
 
-            //_this.outputTextarea.value = UnArchive(textModel.models[0].paths);//textModel.models[1].type;
-            _this.outputTextarea.value = points;//makerjs.chain.toPoints(chains[1], 10);//makerjs.point.middle(textModel.models[0].paths);
+            SamplePoints = points;
         });
     };
     return App;

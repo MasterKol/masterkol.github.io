@@ -8,7 +8,8 @@
 		<title>Fourier Text</title>
 		<meta name="description" content="google-font-to-svg-path">
 
-		<link rel="stylesheet" type="text/css" href="index.css" />
+		<link rel="stylesheet" type="text/css" href="index.css"/>
+		<link rel="stylesheet" type="text/css" href="../SelectionBar.css"/>
 
 		<script src="https://maker.js.org/target/js/browser.maker.js" type="text/javascript"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bezier-js@2/bezier.js"></script>
@@ -17,7 +18,10 @@
 		<script type="text/javascript" src="./Processing.js"></script>
 	</head>
 
-	<body style="background-color: #202020">
+	<body>
+
+		<iframe src="../SelectionBar.html" style="display: none;" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+		<!--this creates an iframe with the html code for the site header, after loading it moves its contents into the DOM so it works like the html was actually here!-->
 
 		<canvas data-processing-sources="./Main.pde" tabindex="0" id="__processing0" width="1000" height="500"></canvas>
 
@@ -27,9 +31,9 @@
 
 			<label style="color: white">Variant: <select id="font-variant" onchange="Changed();"></select></label>
 
-			<label style="color: white">Text: <input type="text" id="input-text" value="Welcome" onkeyup="Changed();"/></label>
+			<label style="color: white">Text: <input type="text" id="input-text" value="Welcome" oninput="Changed();"/></label>
 
-			<label style="color: white">Speed: <input type="number" id="input-speed" value="4" max="20" min="0" style="width: 40px"/></label>
+			<label style="color: white">Speed: <input type="number" id="input-speed" value="10" max="20" min="0" style="width: 40px"/></label>
 
 			<label style="color: white">Resolution: <input type="number" id="input-resolution" value="0" max="0" min="0" style="width: 60px"/></label>
 
@@ -38,13 +42,11 @@
 			<label style="color: white">Line Color: <b id="color-label">aa</b><input type="color" id="input-color" value="#ff0000" style="display: none;" /></label>
 		</div>
 
-		<textarea id="output-svg" style="display: none"></textarea>
-
 		<script type="text/javascript" id="functions">
 			//document.getElementById("input-color").onchange = function color(){
 			
 			//}
-
+			var SamplePoints;
 			function noderender(){}
 			function nodeloadvariants(){}
 
@@ -57,7 +59,7 @@
 				nodeloadvariants();
 				Update();
 			}
+			console.log(document.getElementById("menubar"));
 		</script>
-
 	</body>
 </html>

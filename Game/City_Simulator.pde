@@ -1,10 +1,3 @@
-void setup() {
-  size(1650, 950);
-  background(50,255,50);
-}
-
-//randomSeed(1);
-
 /*******************************************************************************************************************************************************************
   _  __     _    _____                     _                           
  | |/ /    | |  / ____|                   | |                          
@@ -13,6 +6,20 @@ void setup() {
  | . \ (_) | | | |__| | | |  __/  __/ | | | |_) | (_| | |_| | | | | | |
  |_|\_\___/|_|  \_____|_|  \___|\___|_| |_|_.__/ \__,_|\__,_|_| |_| |_|                                                                       
 ********************************************************************************************************************************************************************/
+
+void setup() {
+  background(50,255,50);
+  // for some reason the value returned for the width changes after first setting the size of the canvas, so I set it twice to get the width w/o the scroll bar
+  size(document.getElementById("gameContainer").offsetWidth, window.innerHeight); 
+  size(document.getElementById("gameContainer").offsetWidth, window.innerHeight);
+
+  // initialize buttons
+  playbutton = new button(50,100,300,100,"Play",75,[50,50,255],5);
+	instructionsbutton = new button(50,250,300,100,"Instructions",55,[50,50,255],5);
+	startbutton = new button(50,height-120,300,100,"Start",75,[50,50,255],5);
+	backbutton = new button(675,750,300,100,"Back",75, [50,50,255],5);
+	pausebutton = new button(width-20,0,20,20,"",30,[50,50,255],5);
+}
 
 var useImages = true;
 var averageSpeed = 0;
@@ -992,12 +999,11 @@ function Tab() {
 }
 
 //buttons for menus
-var playbutton = new button(50,100,300,100,"Play",75,[50,50,255],5);
-var instructionsbutton = new button(50,250,300,100,"Instructions",55,[50,50,255],5);
-var startbutton = new button(50,800,300,100,"Start",75,[50,50,255],5);
-var backbutton = new button(675,750,300,100,"Back",75, [50,50,255],5);
-
-var pausebutton = new button(1630,0,20,20,"",30,[50,50,255],5);
+var playbutton;
+var instructionsbutton;
+var startbutton;
+var backbutton;
+var pausebutton;
 
 //sliders for menus
 var mincitysizeslider = new slider(50,140,300,20,0.1,0.5,0.3);
@@ -1150,9 +1156,9 @@ void draw(){
 		fill(220,220,255);
 		pausebutton.draw();
 
-		fill(0);
-		rect(1635,3,3,13);
-		rect(1641,3,3,13);
+		fill(50);
+		rect(pausebutton.pos.x+5,3,3,13); // 1635
+		rect(pausebutton.pos.x+pausebutton.width-8,3,3,13); // 1641
 
 		if(pausebutton.detectClick(true) === true){
 			pscreen = screen;
@@ -1472,7 +1478,7 @@ void draw(){
 		text("The objective of the game is to maximize\nthe speed of traffic flowing through the\ncity. To do this, click on intersections and\ntoggle between having a stoplight and\nstopsign. From there you can modify the\nspecifics of the stop.\n\n\n\nUse your mouse to pan and '+' and '-' to\nzoom, 'c' to recenter your camera and\n'o' to toggle traffic density overlay.", width/2-270, height/2-250);
 		
 		fill(220,220,255);
-		backbutton.pos = new PVector(675,750);
+		backbutton.pos = new PVector(width/2 - instructionsbutton.width/2, height - instructionsbutton.height*3/2);
 		backbutton.draw();
 		if(backbutton.detectClick(true) === true){
 			screen = pscreen;
@@ -1538,7 +1544,7 @@ void draw(){
 		text("Paused", width/2-175, height/2-150);
 
 		fill(175,175,200);
-		backbutton.pos = new PVector(675, 600);
+		backbutton.pos = new PVector(width/2 - instructionsbutton.width/2, height/2 + instructionsbutton.height);
 		backbutton.draw();
 		if(backbutton.detectClick(true) === true){
 			pscreen = screen;
@@ -1546,7 +1552,7 @@ void draw(){
 		}
 
 		fill(175,175,200);
-		instructionsbutton.pos = new PVector(675, 450);
+		instructionsbutton.pos = new PVector(width/2 - instructionsbutton.width/2, height/2 - instructionsbutton.height/2 - 10);
 		instructionsbutton.draw();
 		if(instructionsbutton.detectClick(true) === true){
 			pscreen = screen;

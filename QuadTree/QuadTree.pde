@@ -1,5 +1,7 @@
 void setup(){
-  size(screen.width-10, screen.height-85);
+  //size(screen.width-10, screen.height-85);
+  size(document.getElementById("gameContainer").offsetWidth, window.innerHeight); 
+  size(document.getElementById("gameContainer").offsetWidth, window.innerHeight);
   background(50,50,50);
 }
 
