@@ -36,6 +36,7 @@
 }
 
 .dropdown:hover .dropdown-content {display: block;}
+.dropdown:active .dropdown-content {display: block;}
 
 .flex-container {
     display: flex;
