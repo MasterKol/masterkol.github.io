@@ -27,3 +27,21 @@ label {
     margin-right: 3ex;
     white-space: nowrap;
 }
+
+.imageBox {
+    display: inline;
+    float: left;
+    width: 37.5%;
+    padding-left: 5%;
+}
+
+.descriptionBox {
+    padding-left: 10%;
+    width: 37.5%;
+    display: inline;
+    float: left;
+}
+
+.tab {
+    tab-size: 2;
+}

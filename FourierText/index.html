@@ -42,10 +42,23 @@
 			<label style="color: white">Line Color: <b id="color-label">aa</b><input type="color" id="input-color" value="#ff0000" style="display: none;" /></label>
 		</div>
 
+		<div style="padding-top: 70px;">
+			<div class="descriptionBox">
+				<p style="color: white; text-indent: 30px;">
+					At the heart of this program lies the fast Fourier transform (FFT). It’s no overstatement to say that the whole of modern communication and compression technology relies on his algorithm being extremely fast for large data sets. The discrete Fourier transform can take a set of points and convert them to their frequency domain and back. A simple way of thinking about this is that given samples from an input function such as f(x) = cos(2πx) it returns the magnitude of frequency over the input interval (~0 everywhere except 1 for the example). This is useful for a number of reasons but the main issue with the basic implementation is that the run time scales with the square of the number of samples or O(n^2). The FFT takes advantage of symmetries within the discrete Fourier transform to recursively break the problem into two parts, this allows the time complexity to be reduced to O(n*log(n)) which is a huge improvement. The FFT algorithm that I have implemented here requires the number of sample points to be a power of two in order to work because of the way it breaks down the problem.
+				</p>
+				<p style="color: white; text-indent: 30px;">
+					This program first generates a scalable vector graphic (SVG) from the input parameters and samples a number of points over the path generated. These points are then passed through a FFT in order to extract the frequency data from them. Because of the way the FFT works we get a set of values describing the magnitude and phase of n vectors that rotate a integer frequencies. After obtaining these values I can draw these vectors to the screen tip to tail for a given input time t which is incremented each frame. If the distance along the curve is the same as any one of the input points the value returned by the inverse transform will exactly match that input value, however at intermediate values there is some high frequency error (this can be seen by decreasing the step size to less than 1).
+				</p>
+			</div>
+
+			<div class="imageBox">
+				<img src="./DIT-FFT-butterfly.png" style="display: block; margin-left: auto; margin-right: auto; width: 95%;">
+				<p style="font-size: 13px; color: #ddd; text-align: center;">Example of the way that the FFT breaks computation in half through recursion (source: Wikipedia)</p>
+			</div>
+		<div>
+
 		<script type="text/javascript" id="functions">
-			//document.getElementById("input-color").onchange = function color(){
-			
-			//}
 			var SamplePoints;
 			function noderender(){}
 			function nodeloadvariants(){}
@@ -59,7 +72,6 @@
 				nodeloadvariants();
 				Update();
 			}
-			console.log(document.getElementById("menubar"));
 		</script>
 	</body>
 </html>
