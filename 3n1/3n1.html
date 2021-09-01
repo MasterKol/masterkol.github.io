@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>3n+1</title>
+	<script src="./Processing.js"></script>
+	<link rel="stylesheet" type="text/css" href="./3n1.css">
+	<link href="https://fonts.googleapis.com/css?family=Tajawal" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="../SelectionBar.css"/>
+</head>
+<body style="margin: 0px;background: #323232;">
+	<iframe src="../SelectionBar.html" style="display: none;" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+	<br>
+	
+	<div>
+		<canvas data-processing-sources="./3n1.pde" style="width: 700px; float: left;" id="cnvs"></canvas>
+	</div>
+
+	<script type="text/javascript">
+		function myFunction(event) {
+			scroll(event);
+		}
+
+		document.getElementById("cnvs").addEventListener('wheel',function(event){
+			myFunction(event);
+		    //document.wheelEvent(event);
+		    event.preventDefault();
+		}, false);
+	</script>
+
+	<p style="color: white; border-left: 20px;">Left Drag to move around, Right Click to extend fractal, scroll to zoom</p>
+
+</body>
+</html>
