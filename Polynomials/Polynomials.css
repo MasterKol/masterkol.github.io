@@ -1,0 +1,101 @@
+body {
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	background: #323232;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+}
+
+.coeff-box {
+	width: 220px;
+	height: 100%;
+	color: white;
+	float: left;
+}
+
+.root-box {
+	margin-left: 20px;
+	width: 220px;
+	height: 100%;
+	color: white;
+	float: left;
+}
+
+.coeff-title {
+	width: 220px;
+	color: white;
+	float: left;
+}
+
+.root-title {
+	margin-left: 20px;
+	width: 220px;
+	color: white;
+	float: left;
+}
+
+#writeup {
+	color: white;
+	clear: left;
+	padding-top: 1px;
+	margin-left: 20px;
+	/*width: 200px;*/
+	height: 550px;
+	display: flex;
+	flex-direction: row;
+}
+
+#usage {
+	color: white;
+	width: 350px;
+	flex-grow: 1;
+}
+
+#description {
+	padding-left: 40px;
+	width: 350px;
+	flex-grow: 1;
+}
+
+#description p {
+	text-indent: 2em;
+}
+
+#purpose {
+	padding-left: 40px;
+	width: 350px;
+	flex-grow: 1;
+}
+
+#purpose p {
+	text-indent: 2em;
+}
+
+#coeffs {
+	width: 220px;
+}
+
+#roots {
+	width: 220px;
+}
+
+.entry {
+	display:inline-block;
+	margin: 4px;
+	height: 19px;
+}
+
+.input-coeff::-webkit-outer-spin-button,
+.input-coeff::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+.input-coeff {
+	-moz-appearance: textfield;
+}
