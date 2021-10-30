@@ -14,71 +14,48 @@
 
 	<br>
 	
-	<table>
-		<tr>
-			<td>
-				<div style="width: 700px; height: 700px; margin-left: 10px;">
-					<canvas data-processing-sources="./Polynomials.pde" style="width: 700px; float: left;" id="cnvs"></canvas>
+	<div style="display: flex; flex-direction: row; flex-wrap: wrap;">
+		<div style="width: 700px; height: 700px; margin-left: 10px; margin-bottom: 30px;">
+			<canvas data-processing-sources="./Polynomials.pde" style="width: 700px; float: left;" id="cnvs"></canvas>
+		</div>
+
+		<div id="inputs">
+			<div style="flex: 0 1 auto">
+				<label style="color: white;">Degree: <input type="number" id="input-degree" value="3" max="20" min="1" style="width: 40px"/></label>
+				<br>
+				<label style="color:white;"> View:
+					<select id="input-view-option">
+						<option>Complex Plane</option>
+						<option selected>Original Function</option>
+						<option>Potential Field</option>
+					</select>
+					<span id="view-description"></span>
+				</label>
+			</div>
+
+			<div style="flex: 0 1 auto; display: flex; flex-direction: row; width: 500px;"> <!-- div for titles and buttons -->
+				<div class="coeff-title">
+					<h3 class="tootiptitle" style="color: white; margin-bottom: 5px; text-align: center;">Coefficients</h3>
+					<label style="display: flex; justify-content: center;"><button type="button" id="input-randomize">Randomize Coefficients</button></label>
 				</div>
-			</td>
-			<td style="vertical-align: top;">
-				<div id="inputs" style="margin-left: 20px; display: flex; flex-direction: column; height: 700px; width: 500px; overflow: hidden;">
-					<!--<label style="color: white">Font: <select id="font-select" onchange="fontChanged();"></select></label>-->
-					<div style="flex: 0 1 auto">
-						<label style="color: white;">Degree: <input type="number" id="input-degree" value="3" max="20" min="1" style="width: 40px"/></label>
-						<br>
-						<label style="color:white;"> View:
-							<select id="input-view-option">
-								<option>Complex Plane</option>
-								<option selected>Original Function</option>
-								<option>Potential Field</option>
-							</select>
-							<span id="view-description"></span>
-						</label>
-					</div>
-
-					<div style="flex: 0 1 auto; display: flex; flex-direction: row; overflow: visible;"> <!-- div for titles and buttons -->
-						<div class="coeff-title">
-							<h3 class="tootiptitle" style="color: white; margin-bottom: 5px; text-align: center;">Coefficients</h3>
-							<label style="display: flex; justify-content: center;"><button type="button" id="input-randomize">Randomize Coefficients</button></label>
-						</div>
-						<div class="root-title">
-							<h3 id="coeff-title" style="color: white; margin-bottom: 5px; text-align: center;">Roots</h3>
-							<label style="display: flex; justify-content: center;"><button type="button" id="input-search-reset">Restart Search</button></label>
-						</div>
-					</div>
-
-					<br>
-
-					<div style="overflow-y: auto; flex: 1 1 auto; display: flex; flex-direction: row;">
-						<div class="coeff-box">
-							<div id="coeffs" style="color: white;"></div>
-						</div>
-						<div class="root-box">
-							<div id="roots" style="color: white; text-align: center;"></div>
-						</div>
-					</div>
-
-					<!--
-					<div style="overflow-y: auto; flex: 1 1 auto; display: flex; flex-direction: row; overflow: visible;">
-						<div class="coeff-box">
-							<h3 class="tootiptitle" style="color: white; margin-bottom: 5px; text-align: center;">Coefficents</h3>
-							<label style="display: flex; justify-content: center;"><button type="button" id="input-randomize">Randomize Coefficents</button></label>
-							<br>
-							<div id="coeffs" style="color: white;"></div>
-						</div>
-						<div class="root-box">
-							<h3 id="coeff-title" style="color: white; margin-bottom: 5px; text-align: center;">Roots</h3>
-							<label style="display: flex; justify-content: center;"><button type="button" id="input-search-reset">Restart search</button></label>
-							<br>
-							<div id="roots" style="color: white; text-align: center;"></div>
-						</div>
-					</div>
-					-->
+				<div class="root-title">
+					<h3 id="coeff-title" style="color: white; margin-bottom: 5px; text-align: center;">Roots</h3>
+					<label style="display: flex; justify-content: center;"><button type="button" id="input-search-reset">Restart Search</button></label>
 				</div>
-			</td>
-		</tr>
-	</table>
+			</div>
+
+			<br>
+
+			<div style="overflow-y: auto; flex: 1 1 auto; display: flex; flex-direction: row;">
+				<div class="coeff-box">
+					<div id="coeffs" style="color: white;"></div>
+				</div>
+				<div class="root-box">
+					<div id="roots" style="color: white; text-align: center;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<div id="writeup">
 		<div id="usage">
