@@ -39,8 +39,8 @@
 
 					<div style="flex: 0 1 auto; display: flex; flex-direction: row; overflow: visible;"> <!-- div for titles and buttons -->
 						<div class="coeff-title">
-							<h3 class="tootiptitle" style="color: white; margin-bottom: 5px; text-align: center;">Coefficents</h3>
-							<label style="display: flex; justify-content: center;"><button type="button" id="input-randomize">Randomize Coefficents</button></label>
+							<h3 class="tootiptitle" style="color: white; margin-bottom: 5px; text-align: center;">Coefficients</h3>
+							<label style="display: flex; justify-content: center;"><button type="button" id="input-randomize">Randomize Coefficients</button></label>
 						</div>
 						<div class="root-title">
 							<h3 id="coeff-title" style="color: white; margin-bottom: 5px; text-align: center;">Roots</h3>
@@ -84,20 +84,20 @@
 		<div id="usage">
 			<h2 style="text-align: center;">Usage</h2>
 			<p>
-				<b>Controls:</b> Click and drag on the canvas to move the view, scroll to zoom in and out.
+				<b>Controls:</b> Click and drag on the canvas to move the view, to scroll zoom in and out.
 			</p>
 			<p>
 				<b>Degree:</b> This value changes the maximum exponent in the polynomial. Adding more terms slows the view so I've limited this value to 20.<br>
 			</p>
 			<p>
-				<b>Coefficents:</b> These are the values that each term of the polynomial is multiplied by.<br>
+				<b>Coefficients:</b> These are the values that each term of the polynomial is multiplied by.<br>
 			</p>
 			<p>
 				<b>Roots:</b> Shows the current approximation of the roots. Turns from red to green when approximation is acceptable.<br>
 			</p>
 
 			<p>
-				<b>Circles:</b> The two circles in the view are the minimum and maximum values for the roots of the polynomial, determined by the coefficents.
+				<b>Circles:</b> The two circles in the view are the minimum and maximum values for the roots of the polynomial, determined by the coefficients.
 			</p>
 
 			<b>Views:</b>
@@ -111,10 +111,10 @@
 		<div id="description">
 			<h2 style="text-align: center;">Description</h2>
 			<p>
-				This program uses the Aberth method in order to approximate the roots of some polynomial. This algorithm can be described using an electrostatic anlogy where the roots of the polynomial are positive charges (with their charge equal to the multiplicity of the root) and the current approximation of the roots are negative charges, attracted to the roots and repelled from eachother. The reason for this is so that two potential roots don't converge to the same root (unless it has multiplicity greater than 1).
+				This program uses the Aberth method in order to approximate the roots of some polynomial. This algorithm can be described using an electrostatic analogy where the roots of the polynomial are positive charges (with their charge equal to the multiplicity of the root) and the current approximation of the roots are negative charges, attracted to the roots and repelled from each other. The reason for this is so that two potential roots don't converge to the same root (unless it has multiplicity greater than 1).
 			</p>
 			<p>
-				This program steps the roots every 100 frames (roughly every 3 seconds depending on the frameRate) however they are animated to linearly transition between these steps over time, this is why you may see the roots suddenly change their speed and direction discontinously.
+				This program steps the roots every 100 frames (roughly every 3 seconds depending on the frameRate) however they are animated to linearly transition between these steps over time, this is why you may see the roots suddenly change their speed and direction discontinuously.
 			</p>
 			<p>
 				In order to get this visualization to run well in the browser I had to make quite a few optimizations. Because calculating the color of any given pixel is fairly expensive my goal was to try to minimize the number of times this is performed or spread it over several frames. When the viewport is zoomed the entire screen has to be redrawn so I spread the drawing over 16 frames to spread out the calculation. For translating the viewport only the newly revealed edges have to be drawn, the rest can just be translated over, this allowed me to make viewport translations run fairly quickly in the browser.
