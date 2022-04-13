@@ -17,8 +17,12 @@ var viewInput = document.getElementById("input-view-option");
 var rootRestButton = document.getElementById("input-search-reset");
 var rootBox = document.getElementById("roots");
 var viewDescription = document.getElementById("view-description");
+var canvas = document.getElementById("cnvs");
+var ctx;
 
 boolean converged = false;
+
+var ImageData;
 
 void setup(){
 	size(700, 700);
@@ -47,6 +51,14 @@ void setup(){
 	println(c.real + ", " + c.imag);
 
 	println("--------");*/
+	ctx = canvas.getContext('2d');
+	ctx.imageSmoothingEnabled = true;
+	ctx.mozImageSmoothingEnabled = true;
+	ctx.webkitImageSmoothingEnabled = true;
+	ctx.msImageSmoothingEnabled = true;
+	ctx.imageSmoothingQuality = "high";
+
+	ImageData = ctx.createImageData(width / upScale, height / upScale);
 }
 
 boolean pkeyPressed = keyPressed;
@@ -136,12 +148,13 @@ void draw(){
 				}
 			}
 		}
+
+		updateImageData();
+
 		df++;
 	}
-	
 
-
-	loadPixels();
+	/*loadPixels();
 	//arrayCopy(PolyBuffer, 0, pixels, 0, 700*700);
 	//pixels = PolyBuffer.slice();
 	int usc = upScale * upScale;
@@ -159,7 +172,11 @@ void draw(){
 			}
 		}
 	}
-	updatePixels();
+	updatePixels();*/
+
+	ctx.putImageData(ImageData, 0, 0);
+	ctx.drawImage(canvas, 0, 0, width / upScale, height / upScale, 0, 0, width, height);
+
 	if(Math.round(t * 1000) % 1000 == 0 || npoints[0] == null){
 		getNextPoints();
 		//println("X");
@@ -285,6 +302,8 @@ void draw(){
 					PolyBuffer[y * bufferWidth + x] = getPixelColor(x - accumOffX / upScale, y - accumOffY / upScale);
 				}
 			}
+
+			updateImageData();
 		}
 	}
 	
@@ -306,7 +325,21 @@ class Complex{
 	}
 	
 	float angle(){
-		return atan2(imag, real) + PI;
+		if(real > 0){
+			float a = atanApprox(imag / real) + PI;
+			return (a > 0) ? a : (a + 2*PI);
+		}
+		if(real < 0){
+			float a = atanApprox(imag / real);
+			return (a > 0) ? a : (a + 2*PI);
+		}
+		if(imag > 0){
+			return 3*PI/2;
+		}
+		if(imag < 0){
+			return PI/2;
+		}
+		return 0;
 	}
 	
 	Complex Add(Complex b){
@@ -502,7 +535,7 @@ void getNextPoints(){
 }
 
 color BiLerp(color c00, color c10, color c01, color c11, float px, float py){
-  return lerpColor( lerpColor(c00, c10, px), lerpColor(c01, c11, px) , py);
+	return lerpColor( lerpColor(c00, c10, px), lerpColor(c01, c11, px) , py);
 }
 
 color getPixelColor(float x, float y){
@@ -521,6 +554,28 @@ color getPixelColor(float x, float y){
 		l = 600 - v.len() * 300;
 	}
 	return color(a, 400, l);
+}
+
+float atanApprox(float x){
+  if(-1 <= x && x <= 1){
+    return x / (1 + 0.28086 * x * x);
+  }else if(x > 1){
+    float ix = 1/x;
+    return PI / 2 - ix / (1 + 0.28086 * ix * ix);
+  }else if(x < -1){
+    float ix = 1/x;
+    return -PI / 2 - ix / (1 + 0.28086 * ix * ix);
+  }
+  return x / (1 + 0.28086 * x * x);
+}
+
+void updateImageData(){
+	for(int i = 0; i < width * height / upScale / upScale; i++){
+		ImageData.data[i * 4 + 0] = (PolyBuffer[i] >> 16) & 0xFF; // Red
+		ImageData.data[i * 4 + 1] = (PolyBuffer[i] >> 8) & 0xFF; // Green
+		ImageData.data[i * 4 + 2] = PolyBuffer[i] & 0xFF; // Blue
+		ImageData.data[i * 4 + 3] = 255;
+	}
 }
 
 function updateDegree(){
