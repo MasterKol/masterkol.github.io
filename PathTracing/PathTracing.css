@@ -1,78 +1,128 @@
 body {
-    margin: 0px;
-    width: 100%;
-    height: 100%;
-    background: #323232;
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	background: #323232;
+	color: white;
 }
 
 html {
-    width: 100%;
-    height: 100%;
+	width: 100%;
+	height: 100%;
+}
+
+h2 {
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
 .PageContent {
-    margin: 10px;
+	padding-right: 20px;
+	padding-left: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 45em;
 }
 
 .Section {
-    color: white;
-    margin: auto;
-    width: 100% - 20px; /* I'm sure this is the proper way to do this....*/
-    padding-right: 20px;
-    padding-left: 20px;
+	color: white;
+	margin: auto;
+	width: 100% - 20px; /* I'm sure this is the proper way to do this....*/
+	padding-right: 25px;
+	padding-left: 25px;
 }
 
 .Content {
-    flex: 0 1 auto;
-    display: flex;
-    flex-direction: row;
-    /*margin-left: 10px;*/
-    line-height: 1.5;
-    align-items: center;
-    /*text-align: center;*/
+	flex: 0 1 auto;
+	display: flex;
+	flex-direction: row;
+	/*margin-left: 10px;*/
+	line-height: 1.5;
+	align-items: center;
+	/*text-align: center;*/
+}
+
+.Text {
+	display: block;
+	font-size: calc(0.9em + 0.2 * ((100vw - 30em) / 70));
+	line-height: calc(1.5em + 0.3 * ((100vw - 30em) / 70));
 }
 
 .Content > p {
-    margin-top: 0px;
-    font-size: 17px;
-    width: 50%;
-    margin-right: 0px;
+	margin-top: 0px;
+	font-size: 17px;
+	width: 50%;
+	margin-right: 0px;
 }
 
 .Carousel {
-    width: 50%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-height: 30em;
+	align-items: stretch;
+
+	margin-top: 2em;
+	margin-bottom: 2em;
+}
+
+.Carousel > img {
+	object-fit: contain;
+	max-height: inherit;
+	max-width: 90%;
 }
 
 .cbtns {
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 30px;
-    cursor: pointer;
+	padding-left: 3%;
+	padding-right: 3%;
+	font-size: 30px;
+	cursor: pointer;
+
+	display:flex;
+	align-items:center;
+	justify-content: center;
+}
+
+.cbtns > p {
+	margin: 0px;
 }
 
 .cbtns:hover {
-    background-color: #555;
-    user-select: none;
+	background-color: #555;
+	user-select: none;
 }
 
 .mySlides{
-    display: none;
+	display: none;
+	object-fit: contain;
 }
 
 .CarouselFigure {
-    margin: 0px;
-    height: 300px;
-    width: 300px;
+	margin: 0px;
+	object-fit: contain;
+	max-height: 30em;
+	width: min-content;
+}
+
+.CarouselFigure > img {
+	max-height: inherit;
 }
 
 .ImageCaption {
-    position: relative;
-    font-size: 13px;
-    height: 0px;
-    width: 90%;
-    margin-left: 5%;
+	position: relative;
+	font-size: 13px;
+	height: 0px;
+	width: 90%;
+	margin-left: 5%;
+}
+
+.GIFs {
+	text-align: center;
+	width: 100%;
+}
+
+.GIFs > img {
+	object-fit: contain;
+	width: inherit;
 }
