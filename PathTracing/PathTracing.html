@@ -12,8 +12,6 @@
 	<img src="./Images/HeaderRender-transformed.png" width="100%" style="margin: 0px;">
 
 	<div class="PageContent">
-		
-
 		<!-- About -->
 		<h2>About this Page</h2>
 
@@ -64,7 +62,7 @@
 		<h2>Multi-Threading</h2>
 
 		<p class="Text">
-			&emsp;Because the color every pixel of a ray / path traced image is calculated independently it is sometimes called <a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel" style='color: lightblue;'>embarrassingly parallel</a>. This means that the tasks can easily be separated out into multiple threads that all calculate pixel colors at the same time. As this was my first real use of parallelism there were some hiccups along the way but in the end I ended up getting a ton of performance improvements. On my laptop which has 4 cores and 8 threads I get a +168% performance improvement (954 ms / frame vs 2556 ms / frame) distributing the task across 16 threads, which I have found to be optimal for my PC. This increased speed allows for the rendering of much more complex scenes without 
+			&emsp;Because the color every pixel of a ray / path traced image is calculated independently it is sometimes called <a href="https://en.wikipedia.org/wiki/Embarrassingly_parallel" style='color: lightblue;'>embarrassingly parallel</a>. This means that the tasks can easily be separated out into multiple threads that all calculate pixel colors at the same time. As this was my first real use of parallelism there were some hiccups along the way but in the end I ended up getting a ton of performance improvements. On my laptop which has 4 cores and 8 threads I get a +168% performance improvement (954 ms / frame vs 2556 ms / frame) distributing the task across 16 threads, which I have found to be optimal for my PC. This increased speed allows for the rendering of much more complex scenes without.
 		</p>
 		
 		<div class="GIFs">
@@ -106,12 +104,12 @@
 					<figcaption class="ImageCaption" style="top: 5px;">
 						An example of bloom. Bright pixels bleed into the surrounding image.
 					</figcaption>
-					<img src="./Images/Extras/BloomExample.png">
+					<img src="./Images/Extras/BloomExample.png" height="600px">
 				</figure>
 			</div>
 			<div class="mySlides">
 				<figure class="CarouselFigure">
-					<img src="./Images/Extras/DepthOfFieldExample.png">
+					<img src="./Images/Extras/DepthOfFieldExample.png" height="600px">
 					<figcaption class="ImageCaption" style="bottom: 50px;">
 						An example of Depth of Field. Objects far from the focus plane are blurry.
 					</figcaption>
@@ -119,7 +117,7 @@
 			</div>
 			<div class="mySlides">
 				<figure class="CarouselFigure">
-					<img src="./Images/Extras/TranslationExample.gif">
+					<img src="./Images/Extras/TranslationExample.gif" height="600px">
 					<figcaption class="ImageCaption" style="bottom: 50px;">
 						An example of Translation. The mouse can be used to move objects around directly.
 					</figcaption>
@@ -127,7 +125,7 @@
 			</div>
 			<div class="mySlides">
 				<figure class="CarouselFigure">
-					<img src="./Images/Extras/RotationExample.gif">
+					<img src="./Images/Extras/RotationExample.gif" height="600px">
 					<figcaption class="ImageCaption" style="bottom: 50px;">
 						An example of Rotation. The mouse can be used to rotate objects around global and local axes.
 					</figcaption>

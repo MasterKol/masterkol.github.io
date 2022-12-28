@@ -67,12 +67,6 @@ h2 {
 	margin-bottom: 2em;
 }
 
-.Carousel > img {
-	object-fit: contain;
-	max-height: inherit;
-	max-width: 90%;
-}
-
 .cbtns {
 	padding-left: 3%;
 	padding-right: 3%;
@@ -96,6 +90,8 @@ h2 {
 .mySlides{
 	display: none;
 	object-fit: contain;
+	max-height: inherit;
+	max-width: 90%;
 }
 
 .CarouselFigure {
