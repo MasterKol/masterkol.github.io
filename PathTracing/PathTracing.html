@@ -73,11 +73,12 @@
 		<h2>Meshes and the KD Tree</h2>
 		
 		<p class="Text">
-			&emsp;A very recent discovery I made was that reading books is a good way to learn, this was proven to me by the <a href="https://www.pbr-book.org/3ed-2018/contents" style='color: lightblue;'>PBR book</a>. When talking to my teacher about possible research projects he offhandedly mentioned something about KD trees which are spatial data structures used for keeping track of the proximity of points or regions efficiently. I knew from prior reading that these were used in path tracing, but I always imagined they were too complex for me to ever implement, but because he mentioned it I decided to do a bit more reading. This led to me getting fully nerd sniped and spending and entire weekend (20 out of the 48 hrs) working on an implementation for my path tracer. This is where the PBR book first helped me, primarily in understanding how a KD tree worked, then for speeding up implementation. In the end I went from only being able to render small meshes to now being able to render meshes with 300,000 tris! I also was able to add smooth shading and UV textures to make the images look even better. The performance improvements from this can only be captured by big-O notation, with no KD tree the cost of rendering a mesh is O(n) with the number of triangles, but with a KD tree its only O(log(n)). This means for my 300,000 tri mesh I am only doing a *maximum* of 30 ray-triangle intersection tests per ray rather than 300,000! and most rays do far less than that!
+			&emsp;A very recent discovery I made was that reading books is a good way to learn, this was proven to me by the <a href="https://www.pbr-book.org/3ed-2018/contents" style='color: lightblue;'>PBR book</a>. When talking to my teacher about possible research projects he offhandedly mentioned something about KD trees which are spatial data structures used for keeping track of the proximity of points or regions efficiently. I knew from prior reading that these were used in path tracing, but I always imagined they were too complex for me to ever implement, but because he mentioned it I decided to do a bit more reading. This led to me getting fully nerd sniped and spending and entire weekend (20 out of the 48 hrs) working on an implementation for my path tracer. This is where the PBR book first helped me, primarily in understanding how a KD tree worked, then for speeding up implementation. In the end I went from only being able to render small meshes to now being able to render meshes with 300,000 tris! I also was able to add smooth shading and UV textures to make the images look even better. The performance improvements from this can only be captured by big-O notation, with no KD tree the cost of rendering a mesh is O(n) with the number of triangles, but with a KD tree its only O(log(n)). This means for my 300,000 tri mesh I am only doing a *maximum* of 70 ray-triangle intersection tests per ray rather than 300,000! and most rays do far less than that!
 		</p>
 
 		<div class="Carousel">
 			<img src="./Images/Meshes/StanfordDragon.png" class="mySlides" height="600px">
+			<img src="./Images/Meshes/kdTreeImg.png" class="mySlides" height="600px">
 			<img src="./Images/Meshes/StanfordDragonClose.png" class="mySlides" height="600px">
 			<img src="./Images/Meshes/Cactus.png" class="mySlides" height="600px">
 			<img src="./Images/Meshes/dragonAdj.png" class="mySlides" height="600px">
@@ -148,10 +149,10 @@
 		<!-- Future Work Div -->
 		<h2>Source & Executable</h2>
 		<div class="Text">
-			Source is <a href="https://github.com/MasterKol/masterkol.github.io/tree/PathTracing/Source" style="color: lightblue;">here</a><br>
+			Source is <a href="github.com/MasterKol/masterkol.github.io/tree/master/PathTracing/Source/Ray_Tracing_Global_Illumination" style="color: lightblue;">here</a><br>
 			&emsp;This is written in processing JS which is kind of a mashup of Java and JS, if you download <a href="https://processing.org" style="color: lightblue;">PJ4</a> you can run this source. Read at your own risk, this was not written with other people in mind, and it might cause your eyes to bleed. I probably will need a full rewrite to fix that.<br><br>
 
-			Executables are <a href="https://github.com/MasterKol/masterkol.github.io/tree/PathTracing/Executables" style="color: lightblue;">here</a><br>
+			Executables are <a href="https://github.com/MasterKol/masterkol.github.io/tree/master/PathTracing/Executables" style="color: lightblue;">here</a><br>
 			&emsp;If you download the right one you *should* be able to run this locally without having to download PJ4. You will need your own OBJ files if you want to load meshes. Also, this is run at your own risk, if you don't know me maybe running random code from the internet isn't a great idea...
 		</div>
 	</div>
