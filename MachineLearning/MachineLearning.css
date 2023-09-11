@@ -1,0 +1,25 @@
+body {
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	background: #323232;
+	color: white;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+}
+
+h2 {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.PageContent {
+	width: 960px;
+
+	padding-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+}
