@@ -1,0 +1,64 @@
+1
+GoToRight
+b, 0, 1, X, Y
+
+// example input, 100101 10010
+//         start: ^
+// output:        110111
+HALT
+
+GoToRight
+[b] [b] [R] FindStart
+[*] [*] [R] GoToRight
+
+FindStart
+[0] [0] [R] FindStart
+[1] [1] [R] FindStart
+[*] [*] [L] MoveNum
+
+MoveNum
+[0] [X] [L] Carry0R
+[1] [Y] [L] Carry1R
+[b] [b] [R] End
+
+Carry0R
+[b] [b] [L] Carry0L
+[*] [*] [L] Carry0R
+
+Carry0L
+[0] [X] [R] GoToRight
+[b] [X] [R] GoToRight
+[1] [Y] [R] GoToRight
+[*] [*] [L] Carry0L
+
+Carry1R
+[b] [b] [L] Carry1L
+[*] [*] [L] Carry1R
+
+Carry1L
+[0] [Y] [R] GoToRight
+[b] [Y] [R] GoToRight
+[1] [X] [L] Add
+[*] [*] [L] Carry1L
+
+Add
+[1] [0] [L] Add
+[*] [1] [R] GoToRight // should only ever read 1 or 0
+
+// cleanup
+
+End
+[b] [b] [L] FindLeft
+[*] [b] [R] End
+
+FindLeft
+[b] [b] [L] FindLeft
+[X] [0] [L] CleanLeft
+[Y] [1] [L] CleanLeft
+[*] [*] [R] CleanLeft
+
+CleanLeft
+[b] [b] [R] HALT
+[X] [0] [L] CleanLeft
+[Y] [1] [L] CleanLeft
+[*] [*] [L] CleanLeft

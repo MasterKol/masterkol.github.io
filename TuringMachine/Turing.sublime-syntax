@@ -1,0 +1,84 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/syntax.html
+file_extensions: [tur]
+scope: source.tur
+contexts:
+  main:
+    - match: '[0-9]+'
+      scope: tapenum
+
+    - match: '#.*'
+      scope: comment.line
+
+    - match: '\n'
+      set: startState
+
+  startState:
+    - match: '#.*'
+      scope: comment.line
+
+    - match: '\w+'
+      scope: startstate
+
+    - match: '\n'
+      set: chars
+
+  chars:
+    - match: '#.*'
+      scope: comment.line
+
+    - match: '[0-9A-Za-z]'
+      scope: char
+    
+    - match: '\n'
+      set: state
+
+  state:
+    - match: '#.*'
+      scope: comment.line
+
+    - match: '\w+'
+      scope: state
+    
+    - match: '\['
+      pop: true
+      push: [write, inBrackets]
+
+  write:
+    - match: '\['
+      pop: true
+      push: [direction, inBrackets]
+
+  direction:
+    - match: '\['
+      pop: true
+      push: [nextState, dirBrackets]
+
+  nextState:
+    - match: '\w+'
+      scope: nextstate
+      set: state
+
+  inBrackets:
+    - match: '\*'
+      scope: anyselect
+
+    - match: '[0-9A-Za-z]'
+      scope: char
+
+    - match: ']'
+      pop: true
+
+  dirBrackets:
+    - match: 'L'
+      scope: left
+
+    - match: 'R'
+      scope: right
+
+    - match: 'N'
+      scope: nomove
+
+    - match: ']'
+      pop: true

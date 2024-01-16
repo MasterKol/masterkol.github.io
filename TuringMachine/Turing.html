@@ -1,0 +1,351 @@
+<!-- python3 -m http.server --cgi 8080 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Turing Machines</title>
+	<script src="../Processing.js"></script>
+	<link rel="stylesheet" type="text/css" href="./Turing.css">
+	<link rel="stylesheet" type="text/css" href="../SelectionBar.css"/>
+</head>
+<body id="body">
+	<iframe src="../SelectionBar.html" style="display: none;" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
+
+	<br>
+
+	<!-- Canvas -->
+	<canvas data-processing-sources="./Turing.pde" id="cnvs"></canvas>
+
+	<div class="inputArea">
+		<div id="PausedInputs" class="buttonGroup" style="text-align: center;">
+			<button id="LoadProgramButton">Load</button>
+			<button id="PlayButton" style="padding-left: 1em; padding-right: 1em;">Play</button>
+			<!--<button id="ResetButton">Reset</button>-->
+			<!-- <br> -->
+			<div style="width: 100%"></div>
+			<!-- <input type="text" id="TapeInputArea"> -->
+			<textarea style="resize: horizontal;" type="text" id="TapeInputArea" rows="1"></textarea>
+			<button id="TapeButton">SetTape</button>
+		</div>
+		<div id="PlayingInputs" class="buttonGroup" style="display: none;">
+			<button id="PauseButton">Pause</button>
+		</div>
+	</div>
+
+	<!-- Editor -->
+	<div id="editor-container">
+		<div id="editor-button-div" style="background-color: #272822;">
+			<select class="editor-button" id="file-select-dropdown" onchange="ProgramChanged()"></select>
+			<button class="editor-button" onclick="deleteProgram()">Delete</button>
+			<button class="editor-button" onclick="renameProgram()">Rename</button>
+			<button class="editor-button" onclick="createProgram()">New</button>
+			<button class="editor-button" onclick="SaveProgram()">Save</button>
+			
+			<label id="editor-file-upload-label" for="file-upload" class="editor-button"> Upload </label>
+			<input id="file-upload" onchange="LoadProgram()" type="file" style="opacity: 0%; width: 0px;" multiple="multiple" />
+			
+			<!-- <button class="editor-button" onclick="clearSession()">Delete Session</button> -->
+		</div>
+		<div id="editor"></div>
+	</div>
+
+	<footer style="height: 200px;"></footer>
+
+	<script src="./src-min-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+	<!-- Manage editor -->
+	<script>
+		var editor = ace.edit("editor");
+		editor.setTheme("ace/theme/monokai");
+		editor.session.setMode("ace/mode/turing");
+		editor.resize(true);
+
+		// remove markers (line highlights) when cursor changes
+		editor.session.selection.on('changeCursor', function(e) {
+			const prevMarkers = editor.session.getMarkers();
+			if (prevMarkers) {
+				const prevMarkersArr = Object.keys(prevMarkers);
+				for(let item of prevMarkersArr) {
+					editor.session.removeMarker(prevMarkers[item].id);
+				}
+			}
+		});
+
+		editor.session.on('change', function(delta) {
+			// remove annotations when text changes
+			editor.getSession().setAnnotations([]);
+
+			save();
+		});
+	</script>
+
+	<!-- Manage program selection and loading -->
+	<script type="text/javascript">
+		const programStorage = localStorage;
+
+		const sel = document.getElementById("file-select-dropdown");
+		var programs = {};
+
+		// var current_program_name = sessionStorage.getItem("current_program_name");
+
+		load_initial();
+		load();
+		// console.log(programs);
+
+		// set dropdown to correct program
+		// for (var i = sel.length - 1; i >= 0; i--) {
+		// 	if(sel[i].value == current_program_name){
+		// 		sel[i].selected = "selected";
+		// 		break;
+		// 	}
+		// }
+
+		function getCurrentProgamName(){
+			return sessionStorage.getItem("current_program_name");
+		}
+
+		function setCurrentProgramName(name){
+			sessionStorage.setItem("current_program_name", name);
+		}
+
+		function getProgramContents(name){
+			if(programs[name] == undefined){
+				setProgramContents(getCurrentProgamName(), "");
+			}
+
+			return programs[name];
+		}
+
+		function setProgramContents(name, content){
+			programs[name] = content;
+			programStorage.setItem("programs", JSON.stringify(programs));
+		}
+
+		function createDropdownEntry(name){
+			var opt = document.createElement('option');
+			opt.value = name;
+			opt.text = name;
+			sel.appendChild(opt);
+		}
+
+		// loads text from session Storage
+		function load(){
+			editor.setValue(getProgramContents(getCurrentProgamName()), -1);
+		}
+
+		function save(){
+			setProgramContents(getCurrentProgamName(), editor.getValue());
+		}
+
+		function findOption(name){
+			for (var i = sel.length - 1; i >= 0; i--) {
+				if(sel[i].value == name){
+					return sel[i];
+				}
+			}
+			return null;
+			// return document.querySelector(`option[value=${name}]`);
+		}
+
+		// load beginning programs
+		function load_initial(){
+			if(programStorage.getItem("programs") != null){ // session storage already has programs
+				programs = JSON.parse(programStorage.getItem("programs"));
+
+				for (const property in programs) {
+					createDropdownEntry(property);
+				}
+
+				if(getCurrentProgamName() == null){
+					setCurrentProgramName(sel[0].value);
+				}
+				sel.value = getCurrentProgamName();
+
+				return;
+			}
+
+			// session storage has no programs, load initial example programs into list
+			var serverProgramList = ["BasicAdd", "SingleFastAdd"];
+
+			for(const file of serverProgramList){
+				console.log(file);
+				loadServerProgram(file);
+			}
+
+			// loadServerProgram("SingleFastAdd");
+
+			sel[0].selected = "selected";
+			setCurrentProgramName(sel[0].value);
+			programStorage.setItem("programs", programs);
+		}
+
+		function loadServerProgram(name){
+			createDropdownEntry(name);
+			fetch(`./Programs/${name}.tur`)
+				// fetch() returns a promise. When we have received a response from the server,
+				// the promise's `then()` handler is called with the response.
+				.then((response) => {
+					// Our handler throws an error if the request did not succeed.
+					if (!response.ok) {
+						throw new Error(`HTTP error: ${response.status}`);
+					}
+					// Otherwise (if the response succeeded), our handler fetches the response
+					// as text by calling response.text(), and immediately returns the promise
+					// returned by `response.text()`.
+					return response.text();
+				})
+				// When response.text() has succeeded, the `then()` handler is called with
+				// the text, and we copy it into the `poemDisplay` box.
+				.then((text) => {
+					//poemDisplay.textContent = text;
+					// console.log(text);
+					setProgramContents(name, text);
+					if(name == getCurrentProgamName()){
+						load();
+					}
+				})
+				// Catch any errors that might happen, and display a message
+				// in the `poemDisplay` box.
+				.catch((error) => {
+					//poemDisplay.textContent = `Could not fetch verse: ${error}`;
+					console.log("error: ", error);
+				});
+		}
+
+		function ProgramChanged(){
+			setCurrentProgramName(sel.value);
+			load();
+		}
+
+		function clearSession(){
+			console.log("Cleared session");
+			sessionStorage.clear();
+			programStorage.clear();
+		}
+
+		function isValidName(name){
+			return findOption(name) == null; // check for uniqueness
+		}
+
+		function renameProgram(){
+			const old_program_name = getCurrentProgamName();
+			var new_name = old_program_name;
+			var textPrompt = "New program name";
+
+			do { // loop until new name is unique
+				new_name = prompt(textPrompt, new_name);
+				if(new_name == null || new_name == "" || old_program_name == new_name){
+					return;
+				}
+				textPrompt = "New name must be unique";
+			} while(!isValidName(new_name));
+
+			var option = findOption(old_program_name);
+			if(option == null){
+				return;
+			}
+
+			var programContents = getProgramContents(old_program_name);
+			delete programs[old_program_name];
+			setProgramContents(new_name, programContents);
+
+			option.text = new_name;
+			option.value = new_name;
+			setCurrentProgramName(new_name);
+		}
+
+		function deleteProgram(){
+			if(!confirm("Are you sure you want to delete the current program?")){
+				return;
+			}
+			const program_to_delete = getCurrentProgamName();
+			findOption(program_to_delete).remove();
+
+			delete programs[program_to_delete];
+			programStorage.setItem("programs", JSON.stringify(programs));
+
+			if(sel.length > 0){
+				setCurrentProgramName(sel[0].value);
+			}else{
+				createDropdownEntry("Untitled");
+				setCurrentProgramName("Untitled");
+			}
+
+			load();
+		}
+
+		function createProgram(){
+			var name = "";
+			var textPrompt = "New program name";
+			
+			do { // loop until new name is unique
+				name = prompt(textPrompt, name);
+				if(name == null || name == ""){
+					return;
+				}
+				textPrompt = "New name must be unique";
+			} while(!isValidName(name));
+
+			createDropdownEntry(name);
+			sel.value = name;
+			setCurrentProgramName(name);
+
+			load();
+		}
+
+		function SaveProgram(){
+			const saved_program_name = `${getCurrentProgamName().replace(" ", "_")}.tur`;
+
+			var pom = document.createElement('a');
+			pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(editor.getValue()));
+			pom.setAttribute('download', saved_program_name);
+
+			document.body.appendChild(pom);
+			if (document.createEvent) {
+				var event = document.createEvent('MouseEvents');
+				event.initEvent('click', true, true);
+				pom.dispatchEvent(event);
+			}
+			else {
+				pom.click();
+			}
+			pom.remove();
+		}
+
+		const input = document.getElementById("file-upload");
+		function LoadProgram(){
+			const curFiles = input.files;
+			if(curFiles.length == 0){
+				return;
+			}
+
+			var isFirst = true;
+			for (const file of curFiles) {
+				const fileBasename = file.name.split(".")[0];
+
+				var fileReader = new FileReader();
+				fileReader.onload = function(fileLoadedEvent){
+					var textFromFileLoaded = fileLoadedEvent.target.result;
+					var name = fileBasename;
+
+					for(var i = 1; !isValidName(name); i++) { // loop until new name is unique
+						name = fileBasename + i.toString();
+					}
+
+					createDropdownEntry(name);
+					setProgramContents(name, textFromFileLoaded);
+
+					if(isFirst){ // I'm certain this is a race condition....
+						isFirst = false;
+						sel.value = name;
+						setCurrentProgramName(name);
+					}
+				};
+
+				fileReader.readAsText(file, "UTF-8");
+			}
+		}
+	</script>
+</body>
+</html>

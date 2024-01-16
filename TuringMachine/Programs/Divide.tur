@@ -1,0 +1,68 @@
+// first tape contains dividend
+// second tape contians divisor
+// third tape gets output
+
+3
+RL0s
+b, 0, 1
+
+// this is one of the most basic division algorithms
+// this program works by first negating the second number (using two's complement)
+// and then adding the lower number to the top until it becomes negative
+
+HALT
+
+RL0s // Remove leading 0s
+[b, b, *] [*, *, *] [N, N, N] HALT
+[0, 0, *] [b, b, *] [R, R, N] RL0s
+[1, 1, *] [*, *, *] [R, R, N] GoToRight
+[1, *, *] [*, b, *] [N, R, N] RL0s
+[*, 1, *] [b, *, *] [R, N, N] RL0s
+
+GoToRight // initialially move all to the right
+[b, b, b] [*, *, *] [L, L, N] InvtAdd1s
+[b, b, 0] [*, *, b] [L, L, N] Add1
+[b, b, 1] [*, *, b] [L, L, N] AddNoCarry
+[*, b, *] [*, *, *] [R, N, N] GoToRight
+[b, *, *] [*, *, *] [N, R, N] GoToRight
+[*, *, *] [*, *, *] [R, R, N] GoToRight
+
+InvtAdd1s // swap all 1s for 0s and 0s for 1s in the second tape
+[b, b, *] [0, 1, 0] [R, R, N] GoToRight
+[b, 1, *] [0, 0, *] [L, L, N] InvtAdd1s
+[b, 0, *] [0, 1, *] [L, L, N] InvtAdd1s
+[*, 1, *] [*, 0, *] [L, L, N] InvtAdd1s
+[*, *, *] [*, 1, *] [L, L, N] InvtAdd1s
+
+Add1 // add 1 to the second tape
+[*, 0, *] [*, 1, *] [R, R, N] GoToRight
+[*, 1, *] [*, 0, *] [N, L, N] Add1
+
+AddNoCarry // add second to first, no carry present
+[b, b, *] [*, *, *] [R, R, N] HALT
+[1, 1, *] [0, *, *] [L, L, N] AddCarry
+[*, 1, *] [1, *, *] [L, L, N] AddNoCarry
+[1, 0, *] [1, *, *] [L, L, N] AddNoCarry
+[*, 0, *] [0, *, *] [L, L, N] AddNoCarry
+
+AddCarry // add second to first, carry present
+[b, b, *] [*, *, *] [R, R, N] IncrementOutput
+[1, 1, *] [1, *, *] [L, L, N] AddCarry
+[*, 1, *] [0, *, *] [L, L, N] AddCarry
+[1, *, *] [0, *, *] [L, L, N] AddCarry
+[*, *, *] [1, *, *] [L, L, N] AddNoCarry
+
+IncrementOutput // division step completed, increment output
+[1, *, *] [*, *, *] [N, N, N] HALT
+[*, *, 1] [*, *, 0] [N, N, L] IncrementOutput
+[*, *, *] [*, *, 1] [N, N, R] Reset
+
+Reset // move all to right
+[b, b, b] [*, *, *] [L, L, L] AddNoCarry
+[b, b, *] [*, *, *] [N, N, R] Reset
+[b, *, b] [*, *, *] [N, R, N] Reset
+[*, b, b] [*, *, *] [R, N, N] Reset
+[b, *, *] [*, *, *] [N, R, R] Reset
+[*, b, *] [*, *, *] [R, N, R] Reset
+[*, *, b] [*, *, *] [R, R, N] Reset
+[*, *, *] [*, *, *] [R, R, R] Reset

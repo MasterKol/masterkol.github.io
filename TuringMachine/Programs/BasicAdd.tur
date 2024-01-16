@@ -1,0 +1,84 @@
+/* This file will explain the structure of a program in this language
+ * and a bit about how a turing machine works.
+ * 
+ * First a note about the editor: everything is autosaved across reloads and
+ * restarts, I think this violates the GDPR but hopefully I don't get in trouble.
+ * 
+ * Read through this file and and the end are instructions on how to use
+ * the above interface.
+ */
+
+3   // the first part of every 'turing' file is the number of tapes in the machine
+    // this is a single 3 tape program so we ask for 3 tapes
+GoToRight // next is the state that the machine should start in
+b, 0, 1 // finally is the symbols that the machine is allowed to use
+        // All ASCII characters are allowed except *, [, ], ',', and whitespace
+        // the first symbol is a special blank symbol and when loading tapes
+        // can be inputted as a space.
+
+// after the 'preamble' is the actual turing machine program
+
+// any string with no prefix defines a new state,
+// states can consist of any alphanumerics as well as _ and -
+
+// While is is not strictly necessary to use HALT as a terminal state
+// I use it so that programs can be reused easier, that way all terminal
+// states are the same and can easily be located and changed if needed
+HALT
+
+/*
+ * next are the transitions for the state, they are formatted as:
+ * [read, symbols] [write, symbols] [move, direction] nextState
+ * Symbols can be any of the defined symbols or * to match anything or write nothing
+ * The directions are L for left, R for right, and N for nomove
+ * The first element of each list is for the first tape, second for the
+   second tape, and so on.
+ * Finally transitions are matched top down, so the first exact match is used
+   this is useful for creating catchall transitions like below
+ * If no valid match is found then the machine halts.
+ * Additionally there is a default rule for shorter than normal instructions of
+   *, *, N this allows for increasing the number of tapes without having to
+   change all existing code ([1] [b] [L] X -> [1, *] [b, *] [L, N] X)
+ */
+ 
+// To start we can look at a simple program which adds two binary numbers
+// this program takes in 1 number on the top tape and 1 on the bottom and
+// writes their sum on the bottom tape.
+
+GoToRight // moves top two tapes to the right until a blank is reached
+[b, b, *] [*, *, *] [L, L, N] NoCarry   // both at end, move both left to be
+                                        // on right most character and go to NoCarry
+[b, *, *] [*, *, *] [N, R, N] GoToRight // top is at end, middle is not,
+                                        // move middle to the right
+[*, b, *] [*, *, *] [R, N, N] GoToRight // middle is at end, top is not,
+                                        // move top to the right
+[*, *, *] [*, *, *] [R, R, N] GoToRight // both not at end, move right
+
+NoCarry // nothing is being carried
+[b, b, *] [*, *, *] [L, L, L] HALT // all blank, adding has ended, halt
+[1, 1, *] [*, *, 0] [L, L, L] Carry // 1 + 1 = 10, carry 1 over to next position
+[1, *, *] [*, *, 1] [L, L, L] NoCarry // 1 + 0/b = 1, write 1 and carry nothing
+[*, 1, *] [*, *, 1] [L, L, L] NoCarry // 0/b + 1 = 1, write 1 and carry nothing
+[0, 0, *] [*, *, 0] [L, L, L] NoCarry // 0 + 0 = 0, write 0 and carry nothing
+[b, 0, *] [*, *, 0] [L, L, L] NoCarry // b + 0 = 0, write 0 and carry nothing
+[0, b, *] [*, *, 0] [L, L, L] NoCarry // 0 + b = 0, write 0 and carry nothing
+
+Carry // a 1 is being carried, all additions get a + 1
+[b, b, *] [*, *, 1] [L, L, L] HALT // all blank, adding is over, write carried 1 and end
+[1, 1, *] [*, *, 1] [L, L, L] Carry // 1 + 1 + 1 = 11, write 1 and carry again
+[1, *, *] [*, *, 0] [L, L, L] Carry // 1 + 0/b + 1 = 10, write 0 and carry again
+[*, 1, *] [*, *, 0] [L, L, L] Carry // 0/b + 1 + 1 = 10, write 0 and carry again
+[*, *, *] [*, *, 1] [L, L, L] NoCarry // 0/b + 0/b + 1 = 01, write 1 and carry nothing
+
+/*
+ * To run this program, first hit load
+ * Next type 2 binary numbers into the first two lines of the text box,
+ * for example:
+ * 101
+ * 11100
+ * 
+ * Finally hit play and watch as the number are added!
+ * At any point the machine can be paused.
+ * To run the machine again you must hit load, then set the tape again.
+ * I will improve the GUI later but I need to get this out soon.
+ */

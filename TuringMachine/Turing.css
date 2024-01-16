@@ -1,0 +1,93 @@
+body {
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	background: #323232;
+}
+
+.editor-button {
+	vertical-align: top;
+	background-color: #272822;
+	color: white;
+	border: none;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	height: 2em;
+	cursor: pointer;
+}
+
+.editor-button:active{
+	background-color: #474842;
+}
+
+.editor-button:hover{
+	background-color: #373832;
+}
+
+#editor-file-upload-label {
+	display: inline-block;
+	height: 1.525em;
+	padding-top: 0.475em;
+	padding-inline: 6px;
+	text-align: bottom;
+	font-size: 13.33333px;
+	font-family: arial;
+}
+
+#file-select-dropdown{
+	/*margin-left: 0.75em;*/
+	padding-left: 1em;
+}
+
+#editor-container{
+	width: 90%;
+	margin-left: 5%;
+}
+
+#editor {
+	width: 100%;
+    height: 600px;
+}
+
+/*.inputArea {
+	margin: 0.5em;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}*/
+
+.buttonGroup {
+	margin: 0.5em;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+/*.inputArea > * {
+	margin: 0.1em;
+}*/
+
+.myMarker {
+	position: absolute;
+	background: #733b3b; /* #ff5555 */
+	z-index: 20;
+}
+
+.ace_tapenum {
+	color: #b603fc;
+}
+
+.ace_left {
+	color: #18ed00;
+}
+
+.ace_right {
+	color: #fcda3f;
+}
+
+.ace_noop {
+	color: #ababab;
+}
