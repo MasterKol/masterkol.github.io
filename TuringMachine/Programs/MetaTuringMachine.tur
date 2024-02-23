@@ -1,0 +1,185 @@
+4
+CompareStates
+b, 1
+
+/*
+ * All values are in unary (ex. 3 = 111, 5 = 11111, 8 = 11111111)
+ * The first tape represents the virtual tape. Each 'cell' is of length [# symbols in simulated language]
+ * The second tape is the number of the current state (initially 1)
+ * The third tape is the number of symbols in the simulated language used to represent the offset in the current cell
+ * The fourth tape is the program string representing transition function for the simulated machine, the format is
+ *    - transition = [read symbol #]b[write symbol #]b[move direction (1 = left, 11 = right)]b[next state #]
+ *    - state = [state #]b(transition)[bb(transition)]*bbb
+ *    - program = (state)*
+ *    Note: * represents the klene star operator which accepts 0 or more of the preceeding value
+ *    Note: The states should always be in sorted order increasing by 1 for each state
+ */
+
+/* 
+ * Here is a basic input that runs the "singleFastAdd" program that adds two values together:
+11  1   1   11  1   11      11  1   11  11  1   11
+1
+1111
+1 1 1 111 11  1 1 1 11  11 11 1 11  111 111 1 11  1111 1111 1 11  11111 11111 1 11   11 111 11 11 1  1 111 1 11  11 111 1 11  111 111 1 11  1111 111 1 11  11111 111 1 11   111 11 11 111 11  111 111 111 11  1 1 1111 1  11 11 1111 1  111 111 1111 1  1111 1111 1111 1  11111 11111 1111 1   1111 11 1 11111111111 1  111 1 111111111111 1  1 1 11111111 11   11111 11 1111 1 11  1 1111 1 11  111 11111 1 11  1 1 11111 1  11 11 11111 1  111 111 11111 1  1111 1111 11111 1  11111 11111 11111 1   111111 11 11111 1 11  1 11111 1 11  111 1111 11 1  1 1 111111 1  11 11 111111 1  111 111 111111 1  1111 1111 111111 1  11111 11111 111111 1   1111111 1 1 1111111111 11  1111 11 1111111 1  11111 111 1111111 1  1 1 1111111 1  11 11 1111111 1  111 111 1111111 1  1111 1111 1111111 1  11111 11111 1111111 1   11111111 1 1 111111111 1  1 1 11111111 11  11 1 11111111 11  111 1 11111111 11  1111 1 11111111 11  11111 1 11111111 11   111111111 1 1 111111111 1  1111 11 1111111 1  11111 111 1111111 1  1 1 1111111 11  11 11 1111111 11  111 111 1111111 11  1111 1111 1111111 11  11111 11111 1111111 11   1111111111   11111111111 1 1 11111 1  1 1 11111111111 1  11 11 11111111111 1  111 111 11111111111 1  1111 1111 11111111111 1  11111 11111 11111111111 1   111111111111 1 1 111111 1  1 1 111111111111 1  11 11 111111111111 1  111 111 111111111111 1  1111 1111 111111111111 1  11111 11111 111111111111 1
+ * the first tape initially has the value: "100101 101101", and the final value should be "1010010"
+
+ */
+
+/******
+ * You can change the simulation speed by pressing 0-9, or hold space to run the simulation as fast as possible
+ * You need to click on the machine in order to give for key pressed to get recognized
+ ******/
+
+
+// Primary loop will be: Find state that matches state on second tape, find transition that matches current symbol,
+// write new symbol to main tape, set new state, move maintape based on move dir, reset
+
+Finish
+
+CompareStates
+[*, 1, *, 1] [*, *, *, *] [N, R, N, R] CompareStates
+[*, b, *, b] [*, *, *, *] [N, L, N, R] CompareSymbolsSkip // states match
+[*, 1, *, b] [*, *, *, *] [N, N, N, R] NextStateRight0bs // scanned state is too small
+[*, b, *, 1] [*, *, *, *] [N, R, N, R] LeftStateSetup // scanned state is too big
+
+CompareSymbolsSkip // skips the leading 1 on the read symbol in the program
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] CompareSymbols
+[*, *, *, *] [*, *, *, *] [N, N, N, N] Finish
+
+CompareSymbols
+[1, *, *, 1] [*, *, *, *] [R, N, R, R] CompareSymbols
+[*, *, b, b] [*, *, *, *] [L, N, L, R] RestSymAligMatch
+[b, *, 1, b] [*, *, *, *] [L, N, L, R] RestSymAligMatch
+[b, *, 1, 1] [*, *, *, *] [L, N, L, R] RestSymAligNoMatch
+[1, *, 1, b] [*, *, *, *] [L, N, L, R] RestSymAligNoMatch
+
+// =============================--- SYMBOLS MATCH ---============================== //
+
+RestSymAligMatch // erase old symbol
+[*, *, 1, *] [b, *, *, *] [L, N, L, N] RestSymAligMatch
+[*, *, b, *] [*, *, *, *] [R, N, R, R] WriteSymbol // aligned to left, write new symbol
+
+WriteSymbol
+[*, *, *, 1] [1, *, *, *] [R, N, R, R] WriteSymbol
+[*, *, b, b] [*, *, *, *] [L, N, L, R] ClearState // finished writing
+[*, *, *, b] [*, *, *, *] [N, N, N, R] ClearState // finished writing
+
+ClearState
+[*, 1, *, *] [*, b, *, *] [N, L, N, N] ClearState
+[*, *, *, *] [*, *, *, *] [N, R, N, N] WriteState
+
+WriteState
+[*, *, *, 1] [*, 1, *, *] [N, R, N, R] WriteState
+[*, *, *, b] [*, *, *, *] [N, L, N, R] MoveDirSkip
+
+MoveDirSkip // skips the first digit in the dir segment
+[*, *, *, *] [*, *, *, *] [N, N, N, R] DirSplit
+
+DirSplit
+[*, *, *, b] [*, *, *, *] [N, N, N, L] MoveLeft
+[*, *, *, 1] [*, *, *, *] [N, N, N, L] MoveRight
+
+MoveLeft // moves to the left side of the read symbol
+[*, *, 1, *] [*, *, *, *] [L, N, L, N] MoveLeft
+[*, *, b, *] [*, *, *, *] [N, N, R, N] MoveLeftAgain
+
+MoveLeftAgain // moves to the left side of the symbol left of the read one
+[*, *, 1, *] [*, *, *, *] [L, N, R, N] MoveLeftAgain
+[*, *, b, *] [*, *, *, *] [R, N, L, N] Reset
+
+MoveRight // moves to the left side of the symbol right of the read one
+[*, *, 1, *] [*, *, *, *] [R, N, R, N] MoveRight
+[*, *, b, *] [*, *, *, *] [N, N, L, N] Reset
+
+// =============================--- RESET LOGIC ---============================== //
+Reset // resets symbol and state counters
+[*, 1, 1, *] [*, *, *, *] [N, L, L, N] Reset
+[*, 1, *, *] [*, *, *, *] [N, L, N, N] Reset
+[*, *, 1, *] [*, *, *, *] [N, N, L, N] Reset
+[*, b, b, *] [*, *, *, *] [N, R, R, L] RP0bs // done resetting
+
+RP0bs // finds previous start state, 0 blanks found (looking for 3)
+[*, *, *, 1] [*, *, *, *] [N, N, N, L] RP0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, L] RP1bs
+
+RP1bs // finds previous start state, 1 blanks found (looking for 3)
+[*, *, *, 1] [*, *, *, *] [N, N, N, L] RP0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, L] RP2bs
+
+RP2bs // finds previous start state, 2 blanks found (looking for 3)
+[*, *, *, 1] [*, *, *, *] [N, N, N, L] RP0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, R] FProgram // third blank found, go right to state and compare
+
+FProgram // finds start of program
+[*, *, *, b] [*, *, *, *] [N, N, N, R] FProgram
+[*, 1, *, 1] [*, *, *, *] [N, R, N, R] CompareStates
+
+// =============================--- SYMBOLS DON'T MATCH ---============================== //
+
+RestSymAligNoMatch
+[*, *, 1, *] [*, *, *, *] [L, N, L, N] RestSymAligNoMatch
+[*, *, b, *] [*, *, *, *] [R, N, R, N] FindTrans0bs // re-aligned
+
+FindTrans0bs // find next transition, looking for double blanks 0 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] FindTrans0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, R] FindTrans1bs
+
+FindTrans1bs // find next transition, looking for double blanks 1 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] FindTrans0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, R] CheckTerminateSymbol // second blank found now check for third blank
+
+CheckTerminateSymbol
+[*, *, *, b] [*, *, *, *] [N, N, N, N] Finish // no transition matches the current state and symbol so program has terminated
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] CompareSymbols
+
+// =============================--- STATES DON'T MATCH ---============================== //
+
+// ===============--- Scanned is too small, go right ---=============== //
+
+NextStateRight0bs // moving to next state, looking for triple blanks 0 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] NextStateRight0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, R] NextStateRight1bs
+
+NextStateRight1bs // moving to next state, looking for triple blanks 1 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] NextStateRight0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, R] NextStateRight2bs
+
+NextStateRight2bs // moving to next state, looking for triple blanks 2 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] NextStateRight0bs
+[*, *, *, b] [*, *, *, *] [N, R, N, R] CheckMatchRight // third blank found, if next symbol is blank there is no matching state
+
+CheckMatchRight // checks if the end of the current state string has been reached
+[*, *, *, b] [*, *, *, *] [N, N, N, N] Finish // no matching state found
+[*, 1, *, *] [*, *, *, *] [N, N, N, R] NextStateRight0bs
+[*, b, *, *] [*, *, *, *] [N, L, N, N] SkipState
+
+// ================--- Scanned is too big, go left ---================ //
+
+LeftStateSetup
+[*, *, *, 1] [*, *, *, *] [N, R, N, R] LeftStateSetup
+[*, *, *, b] [*, *, *, *] [N, N, N, L] NextStateLeft0bs
+
+NextStateLeft0bs // moving to next state, looking for triple blanks 0 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, L] NextStateLeft0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, L] NextStateLeft1bs
+
+NextStateLeft1bs // moving to next state, looking for triple blanks 1 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, L] NextStateLeft0bs
+[*, *, *, b] [*, *, *, *] [N, N, N, L] NextStateLeft2bs
+
+NextStateLeft2bs // moving to next state, looking for triple blanks 2 found
+[*, *, *, 1] [*, *, *, *] [N, N, N, L] NextStateLeft0bs
+[*, *, *, b] [*, *, *, *] [N, L, N, L] CheckMatchLeft // third blank found, if next symbol is blank there is no matching state
+
+CheckMatchLeft // checks if desired state has been reached, if not continues moving left
+[*, b, *, b] [*, *, *, *] [N, N, N, N] Finish // no matching state found
+[*, b, *, *] [*, *, *, *] [N, N, N, L] NextStateLeft0bs
+[*, 1, *, *] [*, *, *, *] [N, N, N, R] Refind
+
+Refind // skips the three 0s leading into a start state
+[*, *, *, b] [*, *, *, *] [N, N, N, R] Refind
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] SkipState
+
+SkipState
+[*, *, *, 1] [*, *, *, *] [N, N, N, R] SkipState
+[*, *, *, b] [*, *, *, *] [N, N, N, R] CompareSymbolsSkip
