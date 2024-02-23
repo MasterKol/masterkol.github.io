@@ -4,9 +4,9 @@ b, 1
 
 /*
  * All values are in unary (ex. 3 = 111, 5 = 11111, 8 = 11111111)
- * The first tape represents the virtual tape. Each 'cell' is of length [# symbols in simulated language]
+ * The first tape represents the virtual tape. Each 'cell' is of length [# non-blank symbols in simulated language]
  * The second tape is the number of the current state (initially 1)
- * The third tape is the number of symbols in the simulated language used to represent the offset in the current cell
+ * The third tape is the number of non-blank symbols in the simulated language used to represent the offset in the current cell
  * The fourth tape is the program string representing transition function for the simulated machine, the format is
  *    - transition = [read symbol #]b[write symbol #]b[move direction (1 = left, 11 = right)]b[next state #]
  *    - state = [state #]b(transition)[bb(transition)]*bbb
