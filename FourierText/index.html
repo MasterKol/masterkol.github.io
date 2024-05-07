@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <!-- python3 -m http.server --cgi 8080 -->
 
+<!-- credit for getting the svgs to https://github.com/danmarshall/google-font-to-svg-path -->
+
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -19,7 +21,6 @@
 	</head>
 
 	<body>
-
 		<iframe src="../SelectionBar.html" style="display: none;" onload="this.before((this.contentDocument.body||this.contentDocument).children[0]);this.remove()"></iframe>
 		<!--this creates an iframe with the html code for the site header, after loading it moves its contents into the DOM so it works like the html was actually here!-->
 
@@ -27,11 +28,11 @@
 
 		<br>
 		<div id="buttons">
-			<label style="color: white">Font: <select id="font-select" onchange="fontChanged();"></select></label>
+			<label style="color: white">Font: <select id="font-select"></select></label>
 
-			<label style="color: white">Variant: <select id="font-variant" onchange="Changed();"></select></label>
+			<label style="color: white">Variant: <select id="font-variant"></select></label>
 
-			<label style="color: white">Text: <input type="text" id="input-text" value="Welcome" oninput="Changed();"/></label>
+			<label style="color: white">Text: <input type="text" id="input-text" value="Welcome"/></label>
 
 			<label style="color: white">Speed: <input type="number" id="input-speed" value="10" max="20" min="0" style="width: 40px"/></label>
 
@@ -59,19 +60,22 @@
 		<div>
 
 		<script type="text/javascript" id="functions">
-			var SamplePoints;
-			function noderender(){}
-			function nodeloadvariants(){}
-
-			function Changed(){
-				noderender();
+			var SamplePoints = [];
+			function setSamplePoints(points){
+				SamplePoints = points;
 				Update();
 			}
+			// function noderender(){}
+			// function nodeloadvariants(){}
 
-			function fontChanged(){
-				nodeloadvariants();
-				Update();
-			}
+			// function Changed(){
+			// 	noderender();
+			// }
+
+			// function fontChanged(){
+			// 	nodeloadvariants();
+			// 	Update();
+			// }
 		</script>
 	</body>
 </html>
