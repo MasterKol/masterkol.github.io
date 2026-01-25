@@ -76,6 +76,22 @@
 			// 	nodeloadvariants();
 			// 	Update();
 			// }
+
+			function loadQueryParams() {
+				const urlParams = new URLSearchParams(window.location.search);
+				if(urlParams.has("text")) {
+					document.getElementById("input-text").value = urlParams.get("text");
+				}
+			}
+
+			function updateQueryParam(key, query) {
+				const url = new URL(window.location.href);
+				url.searchParams.set(key, value);
+
+				window.history.replaceState({}, '', url.toString());
+			}
+
+			loadQueryParams();
 		</script>
 	</body>
 </html>

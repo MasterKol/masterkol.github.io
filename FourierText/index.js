@@ -119,6 +119,7 @@ var App = /** @class */ (function () {
             points = points.concat(p2a);
         }
 
+        updateQueryParam("text", text);
         setSamplePoints(points);
     };
     App.prototype.render = function (fontIndex, variantIndex, text, size, union, kerning, separate, bezierAccuracy) {
